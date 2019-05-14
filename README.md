@@ -5,7 +5,7 @@ A web application developed with educational purpose.
 
 Obs:
 <br/>
-In order to test, just download the binaries in the folder "it-talent-binaries", execute them and access the application through http://<a/>localhost:8080.
+In order to test, just download the binaries in the folder "it-talent-binaries", execute them and access the application through http://<a/>localhost:8080. Binaries were compiled with Java 12.
 <br/><br/>
 
 **Technologies Used**
