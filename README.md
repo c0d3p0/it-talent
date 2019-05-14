@@ -1,6 +1,7 @@
 # it-talent
 A web application developed with educational purpose.
- 
+    
+
 **Technologies Used**
 
 Java 8+  
