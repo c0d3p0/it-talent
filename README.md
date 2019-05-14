@@ -12,3 +12,4 @@ Spring Cloud Eureka Server
 Spring Cloud Eureka Client  
 Spring Cloud Microservices  
 React.js
+Derby (Relational Database - SQL)
