@@ -1,0 +1,14 @@
+.itemEditArea
+{
+  min-width: 40vw;
+
+  margin-bottom: 4vh;
+  
+  padding-top: 2vh;
+  padding-bottom: 4vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+
+
+  box-shadow: 0 0 0.5vmin 0.2vmin grey;
+}

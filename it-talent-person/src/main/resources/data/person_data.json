@@ -1,0 +1,29 @@
+[
+	{
+		"name":		"Fernando Augusto",
+		"age":		26,
+		"country":	"Brazil",
+		"email":	"fernando@fake.fake"
+	},
+	
+	{
+		"name":		"Paul Smith",
+		"age":		30,
+		"country":	"USA",
+		"email":	"paul@fake.fake"
+	},
+	
+	{
+		"name":		"Peter Peterson",
+		"age":		21,
+		"country":	"Canada",
+		"email":	"peter@fake.fake"
+	},
+	
+	{
+		"name":		"Angel White",
+		"age":		23,
+		"country":	"UK",
+		"email":	"angel@fake.fake"
+	}
+]

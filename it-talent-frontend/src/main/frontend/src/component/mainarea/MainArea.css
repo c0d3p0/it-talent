@@ -1,0 +1,24 @@
+.mainArea
+{
+  color: #303030;
+
+  min-height: 66.6vh;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  margin-top: 4vh;
+  margin-bottom: 6vh;
+  margin-left: 0.6vw;
+  margin-right: 0.6vw;
+
+  font-size: 2.5vmin;
+}
+
+.emptySection
+{
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}

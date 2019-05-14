@@ -1,0 +1,25 @@
+.personListItemMainData
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 2vh;
+}
+
+.personListItemSkillsData
+{
+  display: flex;
+  flex-direction: column;
+
+  min-width: 30vh;
+
+  margin-top: 2vh;
+  margin-bottom: 4vh;
+}
+
+.personListItemSkillsLabel
+{
+  color: #2BB673;
+  font-weight: bold;
+}

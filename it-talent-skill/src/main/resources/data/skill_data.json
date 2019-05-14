@@ -1,0 +1,41 @@
+[
+	{
+		"title": 		"Java",
+		"description":	"Strongly typed, Programing language that builds code to the JVM."
+	},
+
+	{
+		"title": 		"C#",
+		"description":	"Strongly typed, Programing language that builds code to the .NET CLR."
+	},
+	
+	{
+		"title": 		"C++",
+		"description":	"Strongly typed, Programing language that builds code directly to the OS."
+	},
+	
+	{
+		"title": 		"JavaScript",
+		"description":	"Weakly typed, Programing language interpreted by browsers."
+	},
+	
+	{
+		"title": 		"TypeScript",
+		"description":	"A superset of JavaScript. It adds strong typed features to JavaScript."
+	},
+	
+	{
+		"title": 		"HTML",
+		"description":	"Markup language used to create web pages."
+	},
+	
+	{
+		"title": 		"CSS",
+		"description":	"Style sheet language used to manipulate the presentation of web pages."
+	},
+	
+	{
+		"title": 		"SQL",
+		"description":	"Language used to manipulate data in a Relational Databasase Management System (RDBMS)."
+	}
+]

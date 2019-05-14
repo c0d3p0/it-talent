@@ -1,0 +1,16 @@
+.personSkillEditItemContent
+{
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.personSkillItemEditData
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  margin-top: 2vh;
+  margin-bottom: 4vh;
+}

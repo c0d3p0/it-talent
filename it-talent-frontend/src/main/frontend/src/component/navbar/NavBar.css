@@ -1,0 +1,37 @@
+.navBar
+{
+  border-color: #303030;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.navOn, .navOff
+{
+  background-color: white;
+  cursor: pointer;
+  
+  border-style: solid;
+  border-width: 0.1vmin;
+  border-top: 0;
+  border-bottom: 0;
+  
+  font-size: 4vmin;
+
+  margin-left: 0.3vw;
+  margin-right: 0.3vw;
+
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  padding-left: 0.3vw;
+  padding-right: 0.3vw;
+}
+
+.navOn
+{
+  color: #2BB673;
+  font-weight: bold;
+  text-decoration: underline;
+  border-width: 0.3vmin;
+}

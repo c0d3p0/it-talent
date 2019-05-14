@@ -1,0 +1,171 @@
+html
+{
+  height: 100%;
+}
+
+body
+{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+html, body
+{
+  margin: 0px;
+  padding: 0px;
+}
+
+.itTalentButton, .itTalentDarkButton, .itTalentComboBox
+{
+  color: white;
+  font-size: 2vmin;
+
+  border-style: solid;
+
+  padding-top: 0.2vh;
+  padding-bottom: 0.2vh;
+  padding-left: 0.3vw;
+  padding-right: 0.3vw;
+}
+
+.itTalentButton, .itTalentComboBox
+{
+  background-color: #2BB673;
+  border-color: #2BB673;
+}
+
+.itTalentDarkButton
+{
+  background-color: #303030;
+  border-color: #303030;
+}
+
+.itTalentComboBox
+{
+  text-align-last:center;
+  appearance: none;
+}
+
+.itTalentTextField
+{
+  font-size: 2vmin;
+  color: #303030;
+  text-align: center;
+
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-width: 0.3vmin;
+  border-bottom-color: #2BB673;
+}
+
+.listItem
+{
+  display: flex;
+  flex-direction: column;
+
+  max-width: 60vw;
+  
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+
+  padding-top: 1vh;
+  padding-bottom: 1.5vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+
+  box-shadow: 0 0 0.5vmin 0.2vmin grey;
+}
+
+.listItemTitle
+{
+  color: #2BB673;
+  width: 100%;
+  min-width: 40vw;
+  margin-bottom: 1vh;
+  text-align: center;
+  font-size: 3.5vmin;
+  font-weight: bold;
+}
+
+.listItemData
+{
+  width: 100%;
+  margin-right: 0.3vw;
+}
+
+.itTalentActions
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.itTalentActions *
+{
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.itTalentActions button:not(:last-child) 
+{
+  margin-right: 0.5vw;
+}
+
+.itTalentActions button:first-child
+{
+  margin-left: auto;
+}
+
+.itTalentContentArea
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 4vh;
+  margin-bottom: 6vh;
+}
+
+.itTalentForm
+{
+  min-width: 30vw;
+
+  margin-bottom: 4vh;
+  
+  padding-top: 4vh;
+  padding-bottom: 4vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  box-shadow: 0 0 0.5vmin 0.2vmin grey;
+}
+
+.itTalentFormAttribute
+{
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.itTalentFormMessage
+{
+  color: #2BB673;
+  font-weight: bold;
+
+  margin-top: 4vh;
+  margin-bottom: 4vh;
+}
+
+.sectionTitle
+{
+  color: #2BB673;
+  font-weight: bold;
+  font-size: 5vmin;
+  margin-bottom: 4vh;
+}
+

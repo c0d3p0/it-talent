@@ -1,0 +1,48 @@
+[
+	{
+		"personId": 1,
+		"skillId": 1
+	},
+	{
+		"personId": 1,
+		"skillId": 4
+	},
+	{
+		"personId": 1,
+		"skillId": 8
+	},
+	
+	
+	{
+		"personId": 2,
+		"skillId": 2
+	},
+	{
+		"personId": 2,
+		"skillId": 8
+	},
+	
+	
+	{
+		"personId": 3,
+		"skillId": 3
+	},
+	
+	
+	{
+		"personId": 4,
+		"skillId": 4
+	},
+	{
+		"personId": 4,
+		"skillId": 5
+	},
+	{
+		"personId": 4,
+		"skillId": 6
+	},
+	{
+		"personId": 4,
+		"skillId": 7
+	}
+]
