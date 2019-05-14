@@ -2,7 +2,7 @@
 A web application developed with educational purpose.
 
 
-** Technologies Used: **
+**Technologies Used:**
 Java 8+
 Spring Boot
 Spring MVC
