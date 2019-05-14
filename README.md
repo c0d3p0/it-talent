@@ -1,6 +1,6 @@
 # it-talent
 A web application developed with educational purpose.
-    
+<br/><br/>
 
 **Technologies Used**
 
