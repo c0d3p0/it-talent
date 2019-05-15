@@ -5,12 +5,12 @@ A web application developed with educational purpose.
 
 Obs:
 <br/>
-In order to test, just download the binaries in the folder "it-talent-binaries", execute them and access the application through http://<a/>localhost:8080. Binaries were compiled with Java 12.
+There are binaries inside the folder "it-talent-binaries", execute them and access the application through http://<a/>localhost:8080. Binaries were compiled using Java 12.
 <br/><br/>
 
 **Technologies Used**
 
-Java 8+ <br/>
+Java 12 <br/>
 Spring Boot <br/>
 Spring MVC <br/>
 Spring Data <br/>
