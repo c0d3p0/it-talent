@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.iorix2k2.ittalent.personskill</groupId>
 	<artifactId>it-talent-person-skill</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>it-talent-person-skill</name>
 	<description>Person and Skill join service of IT Talent system</description>
 
@@ -28,6 +28,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 		</dependency>
 		
 		<dependency>

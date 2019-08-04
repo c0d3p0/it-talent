@@ -7,12 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import com.iorix2k2.ittalent.personskill.model.Catalogue;
 import com.iorix2k2.ittalent.personskill.model.Person;
 import com.iorix2k2.ittalent.personskill.model.PersonSkill;
 import com.iorix2k2.ittalent.personskill.model.PersonSkillPK;
@@ -28,52 +24,56 @@ public class PersonSkillService
 		return personSkillRepository.findAll();
 	}
 	
+	public List<PersonSkill> getPersonSkillByPersonId(Long personId)
+	{
+		return personSkillRepository.findByPersonSkillPKPersonId(personId);
+	}
+	
+	public List<PersonSkill> getPersonSkillBySkillId(Long skillId)
+	{
+		return personSkillRepository.findByPersonSkillPKSkillId(skillId);
+	}
+	
 	public List<Person> getAllPeople()
 	{
-		Catalogue<Person> personCatalogue = restTemplate.exchange(personServiceURI, HttpMethod.GET,
-				null, new ParameterizedTypeReference<Catalogue<Person>>(){}).getBody();
-		List<Person> peopleList = personCatalogue.getList(); 
+		List<Person> peopleList = personService.getAllPeople();
 		setPeopleSkillList(peopleList);
 		return peopleList;
 	}
 	
 	public Person getPersonById(Long personId)
 	{
-		String url = personServiceURI + "/" + personId;		
-		Person person = restTemplate.getForObject(url, Person.class);
+		Person person = personService.getPerson(personId);
 		
 		if(!person.isEmpty())
-			setPersonSkillList(person);
+		{
+			List<PersonSkill> psList = getPersonSkillByPersonId(person.getId());
+			person.setSkillList(getSkillList(psList));
+		}
 
 		return person;
 	}
 
 	public List<Person> getPeopleByNameWith(String name)
 	{
-		String url = personServiceURI + "/name-with/" + name;
-		Catalogue<Person> personCatalogue = restTemplate.exchange(url, HttpMethod.GET,
-				null, new ParameterizedTypeReference<Catalogue<Person>>(){}).getBody();
-		List<Person> peopleList = personCatalogue.getList(); 
+		List<Person> peopleList = personService.getPeopleByNameWith(name); 
 		setPeopleSkillList(peopleList);
 		return peopleList;
 	}
 	
 	public List<Person> getPeopleBySkillId(Long skillId)
 	{
-		String sUrl = skillServiceURI + "/" + skillId;
-		Skill skillShared = restTemplate.getForObject(sUrl, Skill.class);
+		Skill skillShared = skillService.getSkill(skillId);
 		List<Person> peopleList = new ArrayList<>();
 		
 		if(!skillShared.isEmpty())
 		{
-			List<PersonSkill> personSkillList = personSkillRepository.
-					findByPersonSkillPKSkillId(skillId);
-			String pUrl = personServiceURI + "/";
+			List<PersonSkill> personSkillList = getPersonSkillBySkillId(skillId);
 			Person person;
 			
 			for(PersonSkill psp : personSkillList)
 			{
-				person = restTemplate.getForObject(pUrl + psp.getPersonId(), Person.class);
+				person = getPersonById(psp.getPersonId()); 
 				
 				if(!person.isEmpty())
 					peopleList.add(person);
@@ -85,43 +85,19 @@ public class PersonSkillService
 		return peopleList;
 	}
 
-	
 	public List<Skill> getAllSkills()
 	{
-		Map<Long, Person> personMap = new HashMap<>();
-		Catalogue<Skill> skillCatalogue = restTemplate.exchange(skillServiceURI, HttpMethod.GET,
-				null, new ParameterizedTypeReference<Catalogue<Skill>>(){}).getBody();
-		String personUrl = personServiceURI + "/";
+		Map<Long, Person> peopleMap = new HashMap<>();
+		List<Skill> skillList = skillService.getAllSkills();
 		List<PersonSkill> personSkillList;
-		List<Person> peopleList;
-		Person person;
 		
-		for(Skill skill : skillCatalogue.getList())
+		for(Skill skill : skillList)
 		{
-			peopleList = new ArrayList<Person>();
-			skill.setPeopleList(peopleList);
-			personSkillList = personSkillRepository.findByPersonSkillPKSkillId(skill.getId());
-			
-			for(PersonSkill ps : personSkillList)
-			{
-				if(!personMap.containsKey(ps.getPersonId()))
-				{
-					person = restTemplate.getForObject(personUrl + ps.getPersonId(), Person.class);
-					
-					if(person.isEmpty())
-						person = null;
-					
-					personMap.put(ps.getPersonId(), person);
-				}
-				else
-					person = personMap.get(ps.getPersonId());
-				
-				if(person != null)
-					peopleList.add(person);
-			}
+			personSkillList = getPersonSkillBySkillId(skill.getId());
+			skill.setPeopleList(getPeopleCaching(personSkillList, peopleMap));
 		}
 			
-		return skillCatalogue.getList();
+		return skillList;
 	}
 	
 	private void setPeopleSkillList(List<Person> peopleList)
@@ -131,69 +107,89 @@ public class PersonSkillService
 				
 		Map<Long, Skill> skillMap = new HashMap<>();
 		List<PersonSkill> personSkillList;
-		List<Skill> skillList;
-		Skill skill;
-		String skillUrl = skillServiceURI + "/";
+
 		
 		for(Person person : peopleList)
 		{
-			skillList = new ArrayList<>();
-			personSkillList = personSkillRepository.findByPersonSkillPKPersonId(person.getId());
-			
-			for(PersonSkill ps : personSkillList)
-			{
-				if(!skillMap.containsKey(ps.getSkillId()))
-				{
-					skill = restTemplate.getForObject(skillUrl + ps.getSkillId(), Skill.class);
-					
-					if(skill.isEmpty())
-						skill = null;
-					
-					skillMap.put(ps.getSkillId(), skill);
-				}
-				else
-					skill = skillMap.get(ps.getSkillId());
-				
-				if(skill != null)
-					skillList.add(skill);
-			}
-			
-			person.setSkillList(skillList);
+			personSkillList = getPersonSkillByPersonId(person.getId()); 
+			person.setSkillList(getSkillListCaching(personSkillList, skillMap));
 		}
 	}
-	
-	private void setPersonSkillList(Person person)
-	{
-		if(person == null)
-			return;
-			
-		Skill skill;
-		String url = skillServiceURI + "/";
-		List<Skill> skillList = new ArrayList<>();
-		List<PersonSkill> personSkillList = personSkillRepository.
-				findByPersonSkillPKPersonId(person.getId());
+
+	public List<Person> getPeopleCaching(List<PersonSkill> personSkillList, Map<Long, Person> peopleMap)
+	{		
+		List<Person> peopleList = new ArrayList<>();
+		Person person;
 		
 		for(PersonSkill ps : personSkillList)
 		{
-			skill = restTemplate.getForObject(url + ps.getSkillId(), Skill.class);
+			if(!peopleMap.containsKey(ps.getPersonId()))
+			{
+				person = personService.getPerson(ps.getPersonId());
+				
+				if(person.isEmpty())
+					person = null;
+				
+				peopleMap.put(ps.getPersonId(), person);
+			}
+			else
+				person = peopleMap.get(ps.getPersonId());
+			
+			peopleList.add(person);
+		}
+		
+		return peopleList;
+	}
+	
+	public List<Skill> getSkillList(List<PersonSkill> personSkillList)
+	{
+		List<Skill> skillList = new ArrayList<>();
+		Skill skill;
+		
+		for(PersonSkill ps : personSkillList)
+		{
+			skill = skillService.getSkill(ps.getSkillId());
 			
 			if(!skill.isEmpty())
 				skillList.add(skill);
 		}
 		
-		person.setSkillList(skillList);
+		return skillList;
 	}
-
+	
+	public List<Skill> getSkillListCaching(List<PersonSkill> personSkillList, Map<Long, Skill> skillMap)
+	{
+		List<Skill> skillList = new ArrayList<>();
+		Skill skill;
+		
+		for(PersonSkill ps : personSkillList)
+		{
+			if(!skillMap.containsKey(ps.getSkillId()))
+			{
+				skill = skillService.getSkill(ps.getSkillId());
+				
+				if(skill.isEmpty())
+					skill = null;
+				
+				skillMap.put(ps.getSkillId(), skill);
+			}
+			else
+				skill = skillMap.get(ps.getSkillId());
+		
+			skillList.add(skill);
+		}
+		
+		return skillList;
+	}
+	
 	public PersonSkill add(PersonSkill personSkill)
 	{	
-		String url = personServiceURI + "/" + personSkill.getPersonId();
-		Person person = restTemplate.getForObject(url, Person.class);
+		Person person = personService.getPerson(personSkill.getPersonId());
 		
 		if(person.isEmpty())
 			throw new RuntimeException("Person id not found in the system!");
-			
-		url = skillServiceURI + "/" + personSkill.getSkillId();
-		Skill skill = restTemplate.getForObject(url, Skill.class);
+		
+		Skill skill = skillService.getSkill(personSkill.getSkillId());
 		
 		if(skill.isEmpty())
 			throw new RuntimeException("Skill id not found in the system!");
@@ -207,7 +203,6 @@ public class PersonSkillService
 			throw new RuntimeException("PersonId and SkillId cannot be null");
 		
 		PersonSkillPK pspk = new PersonSkillPK(personId, skillId);
-		
 		Optional<PersonSkill> op = personSkillRepository.findById(pspk);
 		
 		if(op.isEmpty())
@@ -235,12 +230,11 @@ public class PersonSkillService
 
 	
 	@Autowired
-	private RestTemplate restTemplate;
-	
-	@Autowired
 	private PersonSkillRepository personSkillRepository;
 	
+	@Autowired
+	private SkillService skillService;
 	
-	private String personServiceURI = "http://it-talent-person-service/api/person";
-	private String skillServiceURI = "http://it-talent-skill-service/api/skill";
+	@Autowired
+	private PersonService personService;
 }
