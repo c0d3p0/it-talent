@@ -64,4 +64,6 @@
 
   line-height: 2vmin;
   text-align: center;
+  
+  pointer-events: none;
 }

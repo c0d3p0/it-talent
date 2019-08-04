@@ -3,7 +3,7 @@ import FormAreaComponent from './FormAreaComponent';
 
 import itTalentService from '../../service/ItTalentService';
 import jsonApiService from '../../service/JsonApiService';
-// import jsUtil from '../../util/JSUtil';
+
 
 class FormArea extends Component
 {
@@ -37,7 +37,7 @@ class FormArea extends Component
         const sd = ad.appendData ?
           itTalentService.getSearchData() : null;
         jsonApiService.executeRequest(ad.url, ad.method, sd, null,
-          null, this.handleGetDataCallback, this.handleErrorCallback);
+          null, this.handleGetDataCallback, this.handleGetDataErrorCallback);
       });
     }
     else
@@ -74,7 +74,7 @@ class FormArea extends Component
       {
         jsonApiService.executeRequest(ad.url, ad.method,
           this.state.data.id, null, JSON.stringify(validation.data),
-          this.handleSubmitCallback, this.handleErrorCallback, {});
+          this.handleSubmitCallback, this.handleSubmitErrorCallback, {});
       }
       else
       {
@@ -95,6 +95,12 @@ class FormArea extends Component
     this.props.setSectionState(null, oi.nextOperationId, sd);
     console.log("FormArea Sent Data");
     console.log(json);
+  }
+
+  handleSubmitErrorCallback = (error) =>
+  {
+    const m = "There was a problem sending the data. \n";
+    this.setState({message: m + error.message})
   }
 
   validateFields = (form) =>
@@ -125,12 +131,6 @@ class FormArea extends Component
 
     validation.valid = true;
     return validation;
-  }
-
-  handleSubmitErrorCallback = (error) =>
-  {
-    const m = "There was a problem sending the data. \n";
-    this.setState({message: m + error.message})
   }
 
   handleCancel = (event) =>

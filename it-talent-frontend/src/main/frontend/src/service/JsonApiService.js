@@ -35,7 +35,7 @@ class JsonApiService
   {
     const finalExtras = extras ? extras : {};
 
-    fetch(url, requestObject).then((response) =>
+    fetch(url, requestObject).then(this._handleError).then((response) =>
     {
       finalExtras.response = response;
       return response.json();
@@ -46,6 +46,14 @@ class JsonApiService
       if(errorCallback)
         errorCallback(error, extras);
     });
+  }
+
+  _handleError = (response) =>
+  {
+    if(!response.ok)
+      throw Error(response.statusText);
+
+    return response;
   }
 
   executeRequest = (url, method, appendData, headers,

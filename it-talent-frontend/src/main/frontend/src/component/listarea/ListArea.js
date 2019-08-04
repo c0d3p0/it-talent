@@ -25,15 +25,18 @@ class ListArea extends Component
     }
     
     data = data ? data : [];
-    this.setState({data: data});
+    this.setState({data: data, message: ""});
     console.log("ListArea Loaded Data");
     console.log(data);
   }
 
   handleErrorCallback = (error) =>
   {
-    console.log(error ? error.message : "");
-    this.setState({data: []});
+    let errorMesssage = "Error loading data! ";
+    errorMesssage += error ? error.message : "";
+    errorMesssage.trim();
+    console.log(errorMesssage);
+    this.setState({data: [], message: errorMesssage});
   }
 
   obtainDataFromApi = () =>
@@ -98,6 +101,7 @@ class ListArea extends Component
         listTitle={listTitle}
         actionMap={this.state.actionMap}
         data={this.state.data}
+        message={this.state.message}
         handleClick={this.handleClick}
       />
     );

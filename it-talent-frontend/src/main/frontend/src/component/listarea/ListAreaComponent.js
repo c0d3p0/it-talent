@@ -6,7 +6,22 @@ import './ListArea.css';
 const ListAreaComponent = (props) =>
 {
   let contentElement;
+  let listContent;
 
+  if(!props.message)
+  {
+    listContent = (
+      <props.componentMap.listView
+        listItem={props.componentMap.listItem}
+        actionMap={props.actionMap}
+        listName={props.listName}
+        data={props.data}
+      />
+    );
+  }
+  else
+    listContent = (<div className="listAreaMessage">{props.message}</div>);
+  
   if(props.componentMap)
   {
     contentElement =
@@ -15,12 +30,7 @@ const ListAreaComponent = (props) =>
         <label className="sectionTitle">
           {props.listTitle}
         </label>
-        <props.componentMap.listView
-          listItem={props.componentMap.listItem}
-          actionMap={props.actionMap}
-          listName={props.listName}
-          data={props.data}
-        />
+        {listContent}
         <div className="listAreaActions">
           <button
             name="newEntry"
