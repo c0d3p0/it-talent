@@ -16,6 +16,6 @@ Spring MVC <br/>
 Spring Data <br/>
 Spring Cloud Eureka Server (Microservices)<br/>
 Spring Cloud Eureka Client (Microservices)<br/>
-Spring Cloud Hystrix (Fault Tolerance)<br/>
+Spring Cloud Hystrix (Fault tolerance)<br/>
 React.js <br/>
 Relational Database (SQL Based) <br/>
