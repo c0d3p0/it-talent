@@ -35,7 +35,7 @@ public class PersonSkill
 	}
 
 	@JsonProperty(value = "personId", access = Access.WRITE_ONLY)
-	public void getPersonId(Long personId)
+	public void setPersonId(Long personId)
 	{
 		this.personSkillPK.setPersonId(personId);
 	}

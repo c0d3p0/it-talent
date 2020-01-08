@@ -22,11 +22,11 @@ public class SkillService
 			commandProperties = {
 					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
 					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "8000")
+					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
 			},
 			
-			threadPoolKey = "skillPool",
+			threadPoolKey = "skillsPool",
 			threadPoolProperties = {
 					@HystrixProperty(name = "coreSize", value = "30"),
 					@HystrixProperty(name = "maxQueueSize", value = "15")
@@ -42,8 +42,8 @@ public class SkillService
 			commandProperties = {
 					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
 					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "8000")
+					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
 			},
 			
 			threadPoolKey = "skillPool",
