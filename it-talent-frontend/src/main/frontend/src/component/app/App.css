@@ -1,13 +1,21 @@
 html
 {
   height: 100%;
+  width: 100%;
 }
 
 body
 {
-  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+  color: white;
+
+  min-width: 912px;
+  min-height: 513px;
+
   display: flex;
   flex-direction: column;
+  justify-content: space-between 
 }
 
 html, body
@@ -16,17 +24,37 @@ html, body
   padding: 0px;
 }
 
-.itTalentButton, .itTalentDarkButton, .itTalentComboBox
+.app
 {
+  width: 100%;
+  height: 100%;
+}
+
+.flexItemsCol
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.flexItemsRow
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.itTalentButton, .itTalentDarkButton,
+.itTalentComboBox
+{
+  cursor: pointer;
   color: white;
-  font-size: 2vmin;
 
   border-style: solid;
+  font-size: 0.85em;
 
-  padding-top: 0.2vh;
-  padding-bottom: 0.2vh;
-  padding-left: 0.3vw;
-  padding-right: 0.3vw;
+  padding-top: 0.19em;
+  padding-bottom: 0.19em;
+  padding-left: 0.38em;
+  padding-right: 0.38em;
 }
 
 .itTalentButton, .itTalentComboBox
@@ -43,113 +71,96 @@ html, body
 
 .itTalentComboBox
 {
-  text-align-last:center;
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  text-align-last: center;
+}
+
+.itTalentButton:focus, .itTalentDarkButton:focus,
+.itTalentComboBox:focus, .itTalentTextField:focus
+{
+  outline: none;
+  box-shadow: none;
 }
 
 .itTalentTextField
 {
-  font-size: 2vmin;
+  background-color: transparent;
   color: #303030;
   text-align: center;
+  font-size: 0.85em;
 
   border-top: 0;
   border-right: 0;
   border-left: 0;
-  border-width: 0.3vmin;
+  border-width: 0.07em;
   border-bottom-color: #2BB673;
+}
+
+.itTalentTextField:disabled
+{
+  background-color: #303030;
+}
+
+.contentArea
+{
+  background-color: #303030;
+  color: white;
+
+  min-width: 55%;
+  max-width: 55%;
+
+  padding: 2em;
+}
+
+.sectionTitle
+{
+  background-color: #2BB673;
+  color: white;
+
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+
+  width: 100%;
+
+  padding-top: 0.38em;
+  padding-bottom: 0.38em;
+  
+  margin-bottom: 2.25em;
+
+  box-shadow: 0 0 0.1em 0.04em #6fdcaf;
 }
 
 .listItem
 {
-  display: flex;
-  flex-direction: column;
+  background-color: #606060;
 
-  max-width: 60vw;
+  min-width: 90%;
   
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  margin-top: 0.88em;
+  margin-bottom: 0.88em;
 
-  padding-top: 1vh;
-  padding-bottom: 1.5vh;
-  padding-left: 1vw;
-  padding-right: 1vw;
+  padding-top: 0.38em;
+  padding-bottom: 0.63em;
+  padding-left: 0.63em;
+  padding-right: 0.63em;
 
-  box-shadow: 0 0 0.5vmin 0.2vmin grey;
+  box-shadow: 0 0 0.1em 0.04em grey;
 }
 
-.listItemTitle
+.listItem > h3
 {
   color: #2BB673;
   width: 100%;
-  min-width: 40vw;
-  margin-bottom: 1vh;
+
+  margin: 0px;
+
   text-align: center;
-  font-size: 3.5vmin;
+  font-size: 1.5em;
   font-weight: bold;
-}
-
-.listItemData
-{
-  width: 100%;
-  margin-right: 0.3vw;
-}
-
-.itTalentActions
-{
-  display: flex;
-  flex-direction: row;
-}
-
-.itTalentActions *
-{
-  margin-top: auto;
-  margin-bottom: 0;
-}
-
-.itTalentActions button:not(:last-child) 
-{
-  margin-right: 0.5vw;
-}
-
-.itTalentActions button:first-child
-{
-  margin-left: auto;
-}
-
-.itTalentContentArea
-{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  margin-top: 4vh;
-  margin-bottom: 6vh;
-}
-
-.itTalentForm
-{
-  min-width: 30vw;
-
-  margin-bottom: 4vh;
-  
-  padding-top: 4vh;
-  padding-bottom: 4vh;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  box-shadow: 0 0 0.5vmin 0.2vmin grey;
-}
-
-.itTalentFormAttribute
-{
-  margin-top: 1vh;
-  margin-bottom: 1vh;
-
-  display: flex;
-  flex-direction: row;
 }
 
 .itTalentFormMessage
@@ -157,15 +168,6 @@ html, body
   color: #2BB673;
   font-weight: bold;
 
-  margin-top: 4vh;
-  margin-bottom: 4vh;
+  margin-top: 1.63em;
+  margin-bottom: 1.63em;
 }
-
-.sectionTitle
-{
-  color: #2BB673;
-  font-weight: bold;
-  font-size: 5vmin;
-  margin-bottom: 4vh;
-}
-

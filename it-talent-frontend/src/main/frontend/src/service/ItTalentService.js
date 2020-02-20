@@ -7,7 +7,7 @@ import apiDataMap from '../config/ApiDataMap';
 import formDisabledFieldMap from '../config/FormDisabledFieldMap';
 import formFieldNameMap from '../config/FormFieldNameMap';
 import jsUtil from '../util/JSUtil';
-// import jsonApiService from './JsonApiService';
+
 
 class ItTalentService
 {
@@ -137,57 +137,6 @@ class ItTalentService
   {
     return this.operationInfo;
   }
-
-  // createOperationInfoCopy = (operationInfo, id, searchData) =>
-  // {
-  //   let newOi = {};
-  //   newOi.searchData = (searchData && id !== 0) ? searchData : null;
-  //   const sourceOi = this.getOperationInfo(id);
-  //   return Object.assign(newOi, sourceOi);
-  // }
-
-
-  // obtainDataFromApi = (operationInfo, sectionInfo) =>
-  // {
-  //   const oi = this.props.operationInfo;
-  //   const apiData = this.props.getApiDataMap(oi.getDataKey);
-
-  //   if(apiData)
-  //   {
-  //     jsonApiService.executeRequest(apiData.url, oi.searchData,
-  //       apiData.method, null, null, this.handleRequestCallback);
-  //   }
-  // }
-
-  // convertJsonToDataArray = (json, fieldName) =>
-  // {
-  //   let dataList = {};
-  //   let fn = fieldName ? fieldName : "list";
-
-  //   if(!Array.isArray(json))
-  //   {
-  //     dataList = json[fieldName];
-
-  //     if(!dataList)
-  //     {
-  //       if(json)
-  //         dataList = [json];
-  //       else
-  //         dataList = null;
-  //     }
-  //   }
-  //   else
-  //     dataList = json;
-
-  //   return dataList;
-  // }
-
-
-  // getArrayData = (array, id) =>
-  // {
-  //   const validId = id ? id : 0;
-  //   return array[validId];
-  // }
 }
 
 const itTalentService = new ItTalentService();

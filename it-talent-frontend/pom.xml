@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.iorix2k2.ittalent.frontend</groupId>
 	<artifactId>it-talent-frontend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<name>it-talent-frontend</name>
 	<description>IT Talent system frontend</description>
 

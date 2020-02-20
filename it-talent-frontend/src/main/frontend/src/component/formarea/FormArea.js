@@ -46,6 +46,7 @@ class FormArea extends Component
 
   handleGetDataErrorCallback = (error) =>
   {
+    console.log(error.message);
     const errorObject = {}
     errorObject.hideConfirmButton = true;
     errorObject.message = "There was a problem retrieving the data!";
@@ -55,8 +56,6 @@ class FormArea extends Component
   handleGetDataCallback = (data) =>
   {
     this.setState(this.getDefaultState(data));
-    console.log("FormArea Loaded Data");
-    console.log(data);
   }
 
   handleSubmit = (event) =>
@@ -93,12 +92,11 @@ class FormArea extends Component
     const sd = oi.type !== "remove" ? json.id : null;
     this.props.setSectionState(null, oi.nextOperationId, sd);
     this.props.setSectionState(null, oi.nextOperationId, sd);
-    console.log("FormArea Sent Data");
-    console.log(json);
   }
 
   handleSubmitErrorCallback = (error) =>
   {
+    console.log(error.message);
     const m = "There was a problem sending the data. \n";
     this.setState({message: m + error.message})
   }

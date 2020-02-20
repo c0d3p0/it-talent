@@ -26,16 +26,14 @@ class ListArea extends Component
     
     data = data ? data : [];
     this.setState({data: data, message: ""});
-    console.log("ListArea Loaded Data");
-    console.log(data);
   }
 
   handleErrorCallback = (error) =>
   {
+    console.log(error.message);
     let errorMesssage = "Error loading data! ";
     errorMesssage += error ? error.message : "";
     errorMesssage.trim();
-    console.log(errorMesssage);
     this.setState({data: [], message: errorMesssage});
   }
 

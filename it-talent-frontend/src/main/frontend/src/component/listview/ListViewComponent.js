@@ -23,14 +23,14 @@ const ListViewComponent = (props) =>
   {
     const name = props.listName ? props.listName : "Unknown";
     itemsComponents = (
-      <div className="listViewEmpty">
-        No entries found in list {name}.
-      </div>
+      <label className="listItem">
+        No entries found in {name}s list.
+      </label>
     );
   }
 
   return (
-    <div>
+    <div className="listView flexItemsRow">
       {itemsComponents}
     </div>
   );

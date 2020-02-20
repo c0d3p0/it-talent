@@ -1,25 +1,33 @@
-.personListItemMainData
+.personListItem > div
 {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
-
-  margin-top: 2vh;
+  margin-top: 1.5em;
 }
 
-.personListItemSkillsData
+.personListItem > div > div:first-child
 {
-  display: flex;
-  flex-direction: column;
-
-  min-width: 30vh;
-
-  margin-top: 2vh;
-  margin-bottom: 4vh;
+  justify-content: space-between;
 }
 
-.personListItemSkillsLabel
+.personListItem > div > div:nth-child(2)
+{
+  margin-top: 0.88em;
+  margin-bottom: 1.63em;
+}
+
+.personListItem > div >
+    div:nth-child(2) > label:first-child
 {
   color: #2BB673;
   font-weight: bold;
+}
+
+.personListItem > div > div:last-child
+{
+  margin-left: auto;
+}
+
+.personListItem > div > div:last-child > button
+{
+  margin-left: 0.63em;
 }

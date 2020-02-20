@@ -1,37 +1,64 @@
 .navBar
 {
-  border-color: #303030;
+  width: 100%;
+  justify-content: center;
+  background-color: transparent;
 
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  height: 3.5em;
+
+  margin-bottom: 4em;
 }
 
-.navOn, .navOff
+.navBar > div
 {
-  background-color: white;
+  width: 25%;
+  background-color: #303030;
+  justify-content: center;
+}
+
+.navBar > div > label
+{
+  background-color: #303030;
   cursor: pointer;
-  
+  color: white;
+  font-size: 1.6em;
+
   border-style: solid;
-  border-width: 0.1vmin;
-  border-top: 0;
-  border-bottom: 0;
-  
-  font-size: 4vmin;
+  border-color: #303030;
 
-  margin-left: 0.3vw;
-  margin-right: 0.3vw;
+  align-items: center;
 
-  padding-top: 0.5vh;
-  padding-bottom: 0.5vh;
-  padding-left: 0.3vw;
-  padding-right: 0.3vw;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+.navBar > div > label:hover
+{
+  background-color: #2BB673;
+  border-color: #2BB673;
 }
 
 .navOn
 {
-  color: #2BB673;
+  background-color: #2BB673 !important;
+  border-color: #2BB673 !important;
   font-weight: bold;
-  text-decoration: underline;
-  border-width: 0.3vmin;
+}
+
+.navBar > span
+{
+  min-width: 25%;
+  max-width: 25%;
+}
+
+.navBar > span:first-child
+{
+  background-image: -webkit-linear-gradient(
+      45deg, transparent 50%, #303030 50%);
+}
+
+.navBar > span:last-child
+{
+  background-image: -webkit-linear-gradient(
+      135deg, transparent 50%, #303030 50%);
 }

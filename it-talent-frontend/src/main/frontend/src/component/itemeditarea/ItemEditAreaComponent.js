@@ -1,30 +1,30 @@
 import React from 'react';
+
 import './ItemEditArea.css';
 
 
 const ItemEditAreaComponent = (props) =>
 { 
-  let messageElement = props.message ? props.message : "";
-  messageElement = messageElement.split('\n').map(
-    (message, index) =>
-    {
-      return (
-        <label
-          key={index}
-          style={{display: 'block'}}
-        >
-          {message}
-        </label>
-      );
-    }
-  );
+  let messages = props.message ? props.message : "";
+  messages = messages.split('\n');
+  const messageElement = messages.map((message, index) =>
+  {
+    return (
+      <label
+        key={index}
+        style={{display: 'block'}}
+      >
+        {message}
+      </label>
+    );
+  });
 
   return (
-    <div className="itTalentContentArea">
+    <div className="itemEditArea contentArea flexItemsRow">
       <label className="sectionTitle">
         {props.title}
       </label>
-      <div className="itemEditArea">
+      <div className="flexItemsRow">
         <props.componentMap.itemEditManager
           data={props.data}
           sendDataToApi={props.sendDataToApi}
@@ -33,7 +33,7 @@ const ItemEditAreaComponent = (props) =>
         <div className="itTalentFormMessage">
           <label>{messageElement}</label>  
         </div>
-        <div className="itTalentActions">
+        <div className="flexItemsRow">
           <button
             name="return"
             className="itTalentButton"

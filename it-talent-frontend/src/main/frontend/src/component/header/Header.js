@@ -5,12 +5,12 @@ import logo from '../../logo.svg';
 const Header = () =>
 {
   return (
-      <header className="header">
-        <div className="appTitle">
-          <img className="appLogo" src={logo} alt="logo"/>
-          <span className="appTitleLabel">IT Talent</span>
-        </div>
-      </header>
+    <header className="header flexItemsRow">
+      <div className="flexItemsCol">
+        <img src={logo} alt="logo"/>
+        <span>IT Talent</span>
+      </div>
+    </header>
   );
 }
 

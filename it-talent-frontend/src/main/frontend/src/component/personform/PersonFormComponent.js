@@ -10,13 +10,9 @@ const PersonFormComponent = (props) =>
   const hc = props.handleChange;
 
   return (
-    <div>
-      <div className="itTalentFormAttribute">
-        <label
-          className="personFormAttributeLabel"
-        >
-          Name:
-        </label>
+    <div className="personForm flexItemsRow">
+      <div className="flexItemsCol">
+        <label>Name:</label>
         <input
           type="text"
           name="name"
@@ -27,12 +23,8 @@ const PersonFormComponent = (props) =>
         />
       </div>
 
-      <div className="itTalentFormAttribute">
-        <label
-          className="personFormAttributeLabel"
-        >
-          Age:
-        </label>
+      <div className="flexItemsCol">
+        <label>Age:</label>
         <input
           type="number"
           name="age"
@@ -43,12 +35,8 @@ const PersonFormComponent = (props) =>
         />
       </div>
 
-      <div className="itTalentFormAttribute">
-        <label
-          className="personFormAttributeLabel"
-        >
-          Country:
-        </label>
+      <div className="flexItemsCol">
+        <label>Country:</label>
         <input
           type="text"
           name="country"
@@ -59,12 +47,8 @@ const PersonFormComponent = (props) =>
         />
       </div>
 
-      <div className="itTalentFormAttribute">
-        <label
-          className="personFormAttributeLabel"
-        >
-          Email:
-        </label>
+      <div className="flexItemsCol">
+        <label>Email:</label>
         <input
           type="text"
           name="email"

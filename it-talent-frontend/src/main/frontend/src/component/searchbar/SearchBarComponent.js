@@ -7,38 +7,42 @@ const SearchBarComponent = (props) =>
   const options = props.searchOptions.map((searchOption, index) =>
   {
     return (
-      <option key={index} value={searchOption.operationInfoId}>
+      <option
+        key={index}
+        value={searchOption.operationInfoId}
+      >
         {searchOption.title}
       </option>
     );
   });
 
   return (
-    <div>
-      <form onSubmit={props.handleSubmit}>
-        <label>Search</label>
-        <select
-          name="operationInfoId"
-          value={props.operationInfoId}
-          onChange={props.handleChange}
-          className="itTalentComboBox searchMarginLeft"
-        >
-          {options}
-        </select>
+    <div className="searchbar flexItemsCol">
+      <form
+        onSubmit={props.handleSubmit}
+        className="flexItemsCol"
+      >
+        <label>Search:</label>
         <input
           type="text"
           name="searchData"
           value={props.searchData ? props.searchData : ''}
           onChange={props.handleChange}
-          className="itTalentTextField
-                      searchMarginLeft
-                      searchTextField"
+          className="itTalentTextField"
         />
-        <button
-          className="itTalentButton searchMarginLeft"
-        >
-          Confirm
-        </button>
+        <div className="flexItemsCol">
+          <select
+            name="operationInfoId"
+            value={props.operationInfoId}
+            onChange={props.handleChange}
+            className="itTalentComboBox"
+          >
+            {options}
+          </select>
+          <button className="itTalentButton">
+            Confirm
+          </button>
+        </div>
       </form>
     </div>
   );

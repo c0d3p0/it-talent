@@ -1,4 +1,12 @@
-.listViewEmpty
+.listView
 {
-  margin-bottom: 4vh;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.listView > label
+{
+  text-align: center;
+
+  padding: 1.5em;
 }

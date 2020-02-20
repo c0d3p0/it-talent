@@ -9,13 +9,9 @@ const SkillFormComponent = (props) =>
   const hc = props.handleChange;
 
   return (
-    <div>
-      <div className="itTalentFormAttribute">
-        <label
-          className="skillFormAttributeLabel"
-        >
-          Title:
-        </label>
+    <div className="skillForm flexItemsRow">
+      <div className="flexItemsCol">
+        <label>Title:</label>
         <input
           type="text"
           name="title"
@@ -26,19 +22,13 @@ const SkillFormComponent = (props) =>
         />
       </div>
 
-      <div className="itTalentFormAttribute">
-        <label
-          className="skillFormAttributeLabel"
-        >
-          Description:
-        </label>
-        <input
-          type="text"
+      <div className="flexItemsRow">
+        <label>Description:</label>
+        <textarea
           name="description"
           value={skill.description ? skill.description : ""}
           disabled={dfm["description"]}
           onChange={dfm["description"] ? null : hc}
-          className="itTalentTextField"
         />
       </div>
     </div>

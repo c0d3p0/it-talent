@@ -7,8 +7,10 @@ class ItemEdit extends Component
 {
   handleClick = (event) =>
   {
-    const action = event.target.getAttribute("item-action");
-    const id = event.target.getAttribute("item-id");
+    let elem = event.target;
+    elem = elem.tagName === "LABEL" ? elem.parentNode : elem;
+    const action = elem.getAttribute("item-action");
+    const id = elem.getAttribute("item-id");
 
     if(action && !jsUtil.isNumber(id))
       this.props.handleAction(id, action, this.handleChangeItem);

@@ -29,8 +29,6 @@ class ItemEditArea extends Component
     state.data[extras.apiData.dataKey] = responseData;
     state.message = "";
     this.setState(state);
-    console.log("ItemEditArea Loaded Data");
-    console.log(state.data);
   }
 
   handleErrorCallBack = (error, extras) =>
@@ -47,7 +45,7 @@ class ItemEditArea extends Component
 
     msg += error.message
     this.setState({message: msg});
-    console.log(msg);
+    console.log(error.message);
   }
   
   sendDataToApi = (apiKey, data, itemEditCallBack,
@@ -98,8 +96,6 @@ class ItemEditArea extends Component
 
     if(valid)
     {
-      console.log("ItemEditArea Sent Data");
-      console.log(json);
       const {id, action} = itemEditCallBackData;
       itemEditCallBack(id, action);
     }

@@ -1,15 +1,26 @@
-.listAreaActions
+.listArea > div
 {
-  width: 100%;
+  align-items: center;
 
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-
-  margin-right: 2vw;
+  min-width: 100%;
+  max-width: 100%;
 }
 
-.listAreaMessage
+.listArea > div > div:last-child
 {
-  margin-bottom: 4vh;
+  width: 100%;
+  justify-content: flex-end;
+
+  margin-top: 1.5em;
+}
+
+.listArea > div > span
+{
+  width: 100%;
+  text-align: center;
+
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+  padding-left: 0;
+  padding-right: 0;
 }

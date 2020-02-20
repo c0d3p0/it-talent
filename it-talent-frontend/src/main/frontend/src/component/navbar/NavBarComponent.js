@@ -8,6 +8,11 @@ const NavBarComponent = (props) =>
   const sections = [];
   sectionsInfo.forEach((sectionInfo) => 
   {
+    let cssSection = "flexItemsCol";
+
+    if(sectionInfo.id === si.id)
+      cssSection += " navOn";
+
     if(sectionInfo.active)
     {
       sections.push((
@@ -15,7 +20,7 @@ const NavBarComponent = (props) =>
           key={sectionInfo.id}
           section-info-id={sectionInfo.id}
           onClick={props.handleClick}
-          className={sectionInfo.id === si.id ? "navOn" : "navOff"}
+          className={cssSection}
         >
           {sectionInfo.name}
         </label>
@@ -24,8 +29,10 @@ const NavBarComponent = (props) =>
   });
 
   return (
-    <nav className="navBar">
-      <div>{sections}</div>
+    <nav className="navBar flexItemsCol">
+      <span></span>
+      <div className="flexItemsCol">{sections}</div>
+      <span></span>
     </nav>
   );
 }

@@ -1,9 +1,17 @@
-.skillsListItemData
+.skillListItem > div
 {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  margin-top: 1.5em;
+  min-width: 100%;
+  max-width: 100%;
 }
 
+.skillListItem > div > div:last-child
+{
+  margin-left: auto;
+  margin-top: 1.63em;
+}
+
+.skillListItem > div > div:last-child > button
+{
+  margin-left: 0.63em; 
+}

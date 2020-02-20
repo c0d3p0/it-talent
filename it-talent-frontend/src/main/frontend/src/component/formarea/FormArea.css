@@ -1,6 +1,41 @@
 .formArea
 {
-  display: flex;
+  width: 30%;
+}
+
+.formArea > div
+{
+  margin-top: 0.88em;
+  margin-bottom: 0.88em;
+
   align-items: center;
-  flex-direction: column;
+
+  padding-top: 0.63em;
+  padding-bottom: 0.63em;
+  padding-left: 0.63em;
+  padding-right: 0.63em;
+
+  background-color: #606060;
+  box-shadow: 0 0 0.1em 0.04em grey;
+}
+
+.formArea > div > form
+{
+  min-width: 60%;
+  max-width: 60%;
+}
+
+.formArea > div > form > div:last-child > button:first-child
+{
+  margin-left: auto;
+}
+
+.formArea > div > form > div:last-child > button:not(:last-child)
+{
+  margin-right: 0.63em;
+}
+
+.formArea > div > form .itTalentFormMessage
+{
+  text-align: center;
 }

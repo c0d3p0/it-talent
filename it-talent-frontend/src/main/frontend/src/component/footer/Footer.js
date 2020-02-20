@@ -3,13 +3,11 @@ import "./Footer.css";
 
 const Footer = () =>
 {
-  var appVersion = "Version 0.1, ";
-  appVersion += "\u00A9";
-  appVersion += " 2019";
+  let appVersion = "Version 0.3, \u00A9 2019-2020";
 
   return (
-    <footer className="footer">
-      <label className="appVersion">{appVersion}</label>
+    <footer className="footer flexItemsCol">
+      <label>{appVersion}</label>
     </footer>
   );
 }

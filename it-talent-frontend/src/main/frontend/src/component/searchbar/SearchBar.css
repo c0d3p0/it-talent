@@ -1,9 +1,41 @@
-.searchMarginLeft
+.searchbar
 {
-  margin-left: 0.5vw;
+  width: 100%;
+  background-color: #303030;
+  color: white;
+
+  padding-top: 1em;
+  padding-bottom: 1.25em;
 }
 
-.searchTextField
+.searchbar > form
 {
-  max-width: 10vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.searchbar > form > label
+{
+  margin-top: auto;
+  margin-right: 0.63em;
+}
+
+.searchbar > form > input
+{
+  min-width: 15em;
+  color: white;
+}
+
+.searchbar > form > div
+{
+  margin-left: 0.63em;
+}
+
+.searchbar > form > div > select:first-child
+{
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  margin-right: 0.63em;
 }

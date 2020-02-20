@@ -1,29 +1,29 @@
 import React from 'react';
 
+import "./FormArea.css";
+
 
 const FormAreaComponent = (props) =>
 { 
-  let messageElement = props.message ? props.message : "";
-  messageElement = messageElement.split('\n').map(
-    (message, index) =>
-    {
-      return (
-        <label
-          key={index}
-          style={{display: 'block'}}
-        >
-          {message}
-        </label>
-      );
-    }
-  );
+  let messages = props.message ? props.message : "";
+  messages = messages.split('\n');
+  const messageElement = messages.map((message, index) =>
+  {
+    return (
+      <label
+        key={index}
+        style={{display: 'block'}}
+      >
+        {message}
+      </label>
+    );
+  });
   let cbtn = (<button className="itTalentButton">Confirm</button>);
 
   return (
-    <div className="itTalentContentArea">
+    <div className="formArea contentArea flexItemsRow">
       <label className="sectionTitle">{props.formTitle}</label>
-
-      <div className="itTalentForm">
+      <div className="flexItemsRow">
         <form onSubmit={props.handleSubmit}>
           <props.componentMap.form
             disabledFieldMap={props.disabledFieldMap}
@@ -35,7 +35,7 @@ const FormAreaComponent = (props) =>
             {messageElement}
           </div>
 
-          <div className="itTalentActions">
+          <div className="flexItemsCol">
             <button
               type="button"
               onClick={props.handleCancel}

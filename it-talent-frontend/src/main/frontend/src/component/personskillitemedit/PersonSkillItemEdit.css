@@ -1,16 +1,24 @@
-.personSkillEditItemContent
+.personSkillItemEdit
 {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
+  width: 100%;
 }
 
-.personSkillItemEditData
+.personSkillItemEdit > div:nth-child(2)
 {
-  display: flex;
-  flex-direction: row;
   justify-content: space-between;
 
-  margin-top: 2vh;
-  margin-bottom: 4vh;
+  margin-top: 1.5em;
+  margin-bottom: 2em;
+}
+
+.personSkillItemEdit > h3
+{
+  color: #2BB673;
+  width: 100%;
+
+  margin: 0px;
+
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
 }

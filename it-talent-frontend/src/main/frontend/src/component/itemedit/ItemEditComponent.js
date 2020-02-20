@@ -4,64 +4,45 @@ import './ItemEdit.css';
 
 const ItemEditComponent = (props) =>
 {
-  const added = [];
-  const available = [];
+  function getItemElements(itemMap, action, buttonSign)
+  {
+    const elements = [];
+    let item;
+    Object.keys(itemMap).forEach((key, index) =>
+    {
+      item = itemMap[key];
   
-  Object.keys(props.addedItemMap).forEach((key, index) =>
-  {
-    const item = props.addedItemMap[key];
+      if(item)
+      {
+        elements.push((
+          <button
+            key={index}
+            item-id={item.id}
+            item-action={action}
+            onClick={props.handleClick}
+            className="itTalentDarkButton flexItemsCol"
+          >
+            {item.text} 
+            <label onClick={props.handleClick}>{buttonSign}</label>
+          </button>
+        ));
+      }
+    });
+    return elements;
+  }
 
-    if(item)
-    {
-      added.push((
-        <button
-          key={index}
-          item-id={item.id}
-          item-action="remove"
-          onClick={props.handleClick}
-          className="itTalentDarkButton itemEditItem"
-        >
-          {item.text} 
-          <label className="itemEditButtonSign">-</label>
-        </button>
-      ));
-    }
-  });
-
-  Object.keys(props.availableItemMap).forEach((key, index) =>
-  {
-    const item = props.availableItemMap[key];
-
-    if(item)
-    {
-      available.push((
-        <button
-          key={index}
-          item-id={item.id}
-          item-action="add"
-          onClick={props.handleClick}
-          className="itTalentDarkButton itemEditItem"
-        >
-          {item.text} 
-          <div className="itemEditButtonSign">+</div>
-        </button>
-      ));
-    }
-  });
-
+  const added = getItemElements(props.addedItemMap, "remove", "-");
+  const available = getItemElements(props.availableItemMap, "add", "+");
+  
   return (
-    <div className="itemEdit">
-      <div className="itemEditGroupArea">
-        <label className="itemEditGroupTitle">Added</label>
-        <div className="itemEditGroup">
-          {added}
-        </div>
+    <div className="itemEdit flexItemsRow">
+      <div className="flexItemsRow">
+        <label>Added</label>
+        <div className="flexItemsCol">{added}</div>
       </div>      
-      <div className="itemEditGroupArea">
-        <label className="itemEditGroupTitle">Available</label>
-        <div className="itemEditGroup">
-          {available}
-        </div>
+      <div className="flexItemsRow">
+        <label>Available</label>
+        <div className="flexItemsCol">{available}</div>
       </div>
     </div>
   )

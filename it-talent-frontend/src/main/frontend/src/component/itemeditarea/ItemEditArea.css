@@ -1,14 +1,17 @@
-.itemEditArea
+.itemEditArea > div
 {
-  min-width: 40vw;
+  align-items: center;
 
-  margin-bottom: 4vh;
-  
-  padding-top: 2vh;
-  padding-bottom: 4vh;
-  padding-left: 1vw;
-  padding-right: 1vw;
+  padding-top: 0.63em;
+  padding-bottom: 0.63em;
+  padding-left: 0.63em;
+  padding-right: 0.63em;
 
+  background-color: #606060;
+  box-shadow: 0 0 0.1em 0.04em grey;
+}
 
-  box-shadow: 0 0 0.5vmin 0.2vmin grey;
+.itemEditArea > div:last-child
+{
+  align-items: flex-end;
 }
