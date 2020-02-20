@@ -5,7 +5,7 @@ A web application developed with educational purpose.
 
 Obs:
 <br/>
-There are binaries inside the folder "it-talent-binaries", execute them and access the application through http://<a/>localhost:8080. The binaries were compiled using Java 12.
+There are binaries inside the folder "it-talent-binaries", execute them and access the application through http://<a/>localhost:3000. The binaries were compiled using Java 12.
 <br/><br/>
 
 **Technologies Used**
