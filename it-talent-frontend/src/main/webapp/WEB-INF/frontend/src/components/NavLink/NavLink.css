@@ -1,0 +1,23 @@
+.nav-link
+{
+  width: 30%;
+  box-shadow: 0 0 4px 2px #20202020;
+  
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-link button
+{
+  font-size: 1.5em;
+  width: 50%;
+}
+
+.nav-link .current
+{
+  color: #FFDF00;
+}

@@ -1,0 +1,52 @@
+.skill-form form 
+{
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.skill-form form label
+{
+  font-weight: bold;
+  min-width: 6rem;
+}
+
+.skill-form form input
+{
+  min-width: 20rem;
+}
+
+.skill-form form textarea
+{
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+
+  height: 10rem;
+  resize: none;
+}
+
+.skill-form .skill-form-actions
+{
+  margin-top: 3rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.skill-form .skill-form-actions button:not(:last-child)
+{
+  margin-right: 3rem;
+}
+
+.skill-form .message
+{
+  text-align: center;
+  font-weight: bold;
+
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}

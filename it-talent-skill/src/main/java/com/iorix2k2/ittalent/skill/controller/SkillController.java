@@ -38,6 +38,13 @@ public class SkillController
 		return new ResponseEntity<Skill>(skill, getHeaders(), HttpStatus.OK);
 	}
 	
+	@RequestMapping(path = "/ids/{ids}", method = RequestMethod.GET)
+	public ResponseEntity<Catalogue<Skill>> getByIds(@PathVariable Long[] ids)
+	{
+		Catalogue<Skill> sc = new Catalogue<Skill>(skillService.getByIds(ids));
+		return new ResponseEntity<Catalogue<Skill>>(sc, getHeaders(), HttpStatus.OK);
+	}
+
 	@RequestMapping(path = "/title-with/{title}", method = RequestMethod.GET)
 	public ResponseEntity<Catalogue<Skill>> getByTitleWith(@PathVariable String title)
 	{
@@ -51,7 +58,7 @@ public class SkillController
 		return new ResponseEntity<Skill>(skillService.add(skill), getHeaders(), HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Skill> update(@PathVariable Long id, @RequestBody Skill skill)
 	{
 		skill.setId(id);
@@ -62,7 +69,8 @@ public class SkillController
 	@RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Skill> remove(@PathVariable Long id)
 	{
-		return new ResponseEntity<Skill>(skillService.remove(id), getHeaders(), HttpStatus.OK);
+		var skill = skillService.remove(id);
+		return new ResponseEntity<Skill>(skill, getHeaders(), HttpStatus.OK);
 	}
 
 	private HttpHeaders getHeaders()

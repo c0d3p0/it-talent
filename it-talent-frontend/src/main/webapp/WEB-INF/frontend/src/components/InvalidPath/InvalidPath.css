@@ -1,0 +1,8 @@
+.invalid-path span
+{
+  text-align: center;
+  font-weight: bold;
+
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}

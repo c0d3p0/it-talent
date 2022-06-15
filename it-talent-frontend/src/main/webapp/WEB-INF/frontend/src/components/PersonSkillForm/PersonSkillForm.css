@@ -1,0 +1,49 @@
+.person-skill-form label
+{
+  font-weight: bold;
+  min-width: 4.5rem;
+}
+
+.person-skill-form .item-groups
+{
+  min-width: 47%;
+  max-width: 47%;
+}
+
+.person-skill-form .item-groups:first-child
+{
+  margin-right: auto;
+}
+
+.person-skill-form .item-groups div
+{
+  background-color: #E0F0E0;
+
+  max-height: 15rem;
+  overflow-y: scroll;
+
+  border: 1px;
+  border-style: solid;
+  border-color: #183020;
+
+  padding: 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.person-skill-form .item-groups div button
+{
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+
+.person-skill-form .message
+{
+  text-align: center;
+  font-weight: bold;
+
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}

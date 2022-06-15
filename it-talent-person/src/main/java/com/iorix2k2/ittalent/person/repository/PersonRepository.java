@@ -10,4 +10,5 @@ import com.iorix2k2.ittalent.person.model.Person;
 public interface PersonRepository extends JpaRepository<Person, Long>
 {
 	List<Person> findByNameContainingIgnoreCase(String name);
+	List<Person> findAllByIdIn(Long[] ids);
 }

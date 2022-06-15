@@ -13,11 +13,11 @@ import com.iorix2k2.ittalent.person.repository.PersonRepository;
 @Component
 public class PersonStartupRunner implements CommandLineRunner
 {
-    @Override
-    public void run(String...args) throws Exception
-    {
-    	persistStartingData();
-    }
+	@Override
+	public void run(String...args) throws Exception
+	{
+		persistStartingData();
+	}
     
 	public void persistStartingData()
 	{

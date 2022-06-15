@@ -1,0 +1,43 @@
+.search
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.search form
+{
+  display: flex;
+  flex-direction: row; 
+}
+
+.search form input
+{
+  appearance: none;
+  background-color: #385030;
+
+  color: white;
+  font-size: 1em;
+  text-align: center;
+  
+  width: 20rem;
+  padding: 4px;
+
+  border: 0;
+  outline: none;
+}
+
+.search form input::selection
+{
+  background-color: #183020;
+}
+
+.search form input::placeholder
+{
+  text-align: center;
+  color: #A0B0A8;
+}
+
+.search form select
+{
+  border-right: 0;
+}

@@ -11,99 +11,100 @@ import org.springframework.web.client.RestTemplate;
 
 import com.iorix2k2.ittalent.personskill.model.Catalogue;
 import com.iorix2k2.ittalent.personskill.model.Person;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 
 @Service
 public class PersonService
 {
-	@HystrixCommand(fallbackMethod = "getAllPeopleOnError",
-			commandProperties = {
-					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
-			},
-			
-			threadPoolKey = "peoplePool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "30"),
-					@HystrixProperty(name = "maxQueueSize", value = "15")
-			})
-	public List<Person> getAllPeople()
+	@CircuitBreaker(name = PERSON_SERVICE_CB, fallbackMethod = "getAllOnError")
+	public List<Person> getAll()
 	{
-		Catalogue<Person> personCatalogue = restTemplate.exchange(personServiceURL, HttpMethod.GET,
+		var personCatalogue = restTemplate.exchange(PERSON_BASE_URL, HttpMethod.GET,
 				null, new ParameterizedTypeReference<Catalogue<Person>>(){}).getBody();
 		return personCatalogue.getList();
 	}
-	
-	@HystrixCommand(fallbackMethod = "getPersonOnError",
-			commandProperties = {
-					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
-			},
-			
-			threadPoolKey = "personPool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "30"),
-					@HystrixProperty(name = "maxQueueSize", value = "15")
-			})
-	public Person getPerson(Long id)
+
+	@CircuitBreaker(name = PERSON_SERVICE_CB, fallbackMethod = "getByIdOnError")
+	public Person getById(Long id)
 	{
-		String url = personServiceURL + "/" + id;	
-		return restTemplate.getForObject(url, Person.class);
+		return restTemplate.getForObject(PERSON_BY_ID_URL, Person.class, id);
 	}
-	
-	@HystrixCommand(fallbackMethod = "getPeopleByNameWithOnError",
-			commandProperties = {
-					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
-			},
-			
-			threadPoolKey = "peopleByNamePool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "30"),
-					@HystrixProperty(name = "maxQueueSize", value = "15")
-			})
-	public List<Person> getPeopleByNameWith(String name)
+
+	@CircuitBreaker(name = PERSON_SERVICE_CB, fallbackMethod = "getByIdsOnError")
+	public List<Person> getByIds(Long[] ids)
 	{
-		String url = personServiceURL + "/name-with/" + name;
-		Catalogue<Person> personCatalogue = restTemplate.exchange(url, HttpMethod.GET,
-				null, new ParameterizedTypeReference<Catalogue<Person>>(){}).getBody();
+		var param = Arrays.toString(ids).replaceAll("(\\[)*( )*(\\])*", "");
+		var personCatalogue = restTemplate.exchange(PERSON_BY_IDS_URL, HttpMethod.GET,
+				null, new ParameterizedTypeReference<Catalogue<Person>>(){}, param).getBody();
+		return personCatalogue.getList();
+	}
+
+	@CircuitBreaker(name = PERSON_SERVICE_CB, fallbackMethod = "getByNameWithOnError")
+	public List<Person> getByNameWith(String name)
+	{
+		var personCatalogue = restTemplate.exchange(PERSON_BY_NAME_URL, HttpMethod.GET,
+				null, new ParameterizedTypeReference<Catalogue<Person>>(){}, name).getBody();
 		return personCatalogue.getList();
 	}
 	
-	@SuppressWarnings("unused")
-	private List<Person> getAllPeopleOnError()
+	@CircuitBreaker(name = PERSON_SERVICE_CB, fallbackMethod = "removeOnError")
+	public Person remove(Long id)
 	{
-		return Arrays.asList(getPersonOnError(-1L));
+		return restTemplate.exchange(PERSON_BY_ID_URL, HttpMethod.DELETE,
+				null, Person.class, id).getBody();
 	}
 
 	@SuppressWarnings("unused")
-	private List<Person> getPeopleByNameWithOnError(String name)
+	private List<Person> getAllOnError(Throwable T)
 	{
-		return Arrays.asList(getPersonOnError(-1L));
+		return Arrays.asList(createUnavailablePerson(-1L));
+	}
+
+	@SuppressWarnings("unused")
+	private Person getByIdOnError(Throwable T)
+	{
+		return createUnavailablePerson(-1L);
+	}
+
+	@SuppressWarnings("unused")
+	private List<Person> getByIdsOnError(Throwable T)
+	{
+		return Arrays.asList(createUnavailablePerson(-1L));
+	}
+
+	@SuppressWarnings("unused")
+	private List<Person> getByNameWithOnError(Throwable T)
+	{
+		return Arrays.asList(createUnavailablePerson(-1L));
 	}
 	
-	private Person getPersonOnError(Long id)
+	@SuppressWarnings("unused")
+	private Person removeOnError(Throwable T)
 	{
-		Person p = new Person();
-		p.setId(id);
+		return createUnavailablePerson(-1L);
+	}
+
+	public Person createUnavailablePerson(Long id)
+	{
+		var p = new Person();
+		p.setId(id != null ? id : -1L);
 		p.setName("Unavailable");
-		p.setAge((byte)0);
+		p.setAge((byte) -1);
 		p.setCountry("Unavailable");
 		p.setEmail("unavailable@unavailable.com");
 		return p;
 	}
-	
-	
+
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
-	private String personServiceURL = "http://it-talent-person-service/api/person";
+
+	private static final String PERSON_BASE_URL = "http://it-talent-person-service/api/person";
+	private static final String PERSON_BY_ID_URL = PERSON_BASE_URL + "/{id}";
+	private static final String PERSON_BY_IDS_URL = PERSON_BASE_URL + "/ids/{ids}";
+	private static final String PERSON_BY_NAME_URL = PERSON_BASE_URL + "/name-with/{name}";
+
+	private static final String PERSON_SERVICE_CB = "personServiceCB";
 }

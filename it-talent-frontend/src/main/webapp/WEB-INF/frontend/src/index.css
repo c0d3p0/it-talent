@@ -1,0 +1,240 @@
+.button, .button-border, .squared-button
+{
+  appearance: none;
+  cursor: pointer;
+  background-color: #183020;
+  
+  color: white;
+  text-align: center;
+
+  outline: none;
+}
+
+.button, .button-border
+{
+  font-size: 1em;
+  padding: 4px 8px;
+}
+
+.button, .squared-button
+{
+  border: 0;
+}
+
+.button:hover, .button-border:hover, .squared-button:hover
+{
+  background-color: #385030;
+}
+
+.button-border
+{
+  border: 1px;
+  border-style: solid;
+  border-color: #385030;
+}
+
+.squared-button
+{
+  font-size: 1.5em;
+
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.textfield-dark, .textfield-light
+{
+  appearance: none;
+  background-color: transparent;
+
+  font-size: 1em;
+
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  border-bottom: 1px;
+  border-style: solid;
+  outline: none;
+}
+
+.textfield-dark::selection, .textfield-light::selection
+{
+  color: white;
+  background-color: #486040;
+}
+
+.textfield-light::placeholder, .textfield-dark::placeholder
+{
+  color: #A0B0A8;
+}
+
+.textfield-dark
+{
+  color: #001808;
+  border-color: #183020;
+}
+
+.textfield-light
+{
+  color: white;
+  border-color: white;
+}
+
+.textfield-dark:disabled, .textfield-dark:disabled
+{
+  color: white;
+  background-color: #385030;
+}
+
+.textarea
+{
+  appearance: none;
+  background-color: #E0F0E0;
+
+  color: #001808;
+  font-size: 1em;
+
+  border: 1px;
+  border-style: solid;
+  border-color: #183020;
+  outline: none;
+}
+
+.item-list {
+  border: 1px;
+  border-style: solid;
+  border-color: #183020;
+  
+  max-height: 10rem;
+  overflow-y: scroll;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.item-list button {
+  appearance: none;
+  background-color: #E0F0E0;
+  
+  color: #001808;
+  font-size: 1em;
+  text-align: left;
+  
+  cursor: pointer;
+  border: 0;
+}
+
+.item-list button:hover {
+  color: white;
+  background-color: #385030;
+}
+
+.box
+{
+  background-color: #F0FFF8;
+  box-shadow: 0 0 4px 2px #20202020;
+  width: 50%;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.box .box-title
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.box .box-title h1
+{
+  background-color: #183020;
+  color: #F0FFF8;
+  text-align: center;
+
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  margin-top: 0;
+  margin-bottom: 1rem;
+
+  width: 100%;
+}
+
+.box .box-title .box-actions
+{
+  position: relative;
+  left: -3rem;
+
+  width: 0;
+  margin-top: 1rem;  
+}
+
+.box > .box-content
+{
+  padding: 1.25rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field
+{
+  margin-bottom: 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+}
+
+*::-webkit-scrollbar
+{
+  background-color: transparent;
+  width: 0.7em;
+  height: 0.7em;
+}
+
+*::-webkit-scrollbar-thumb
+{
+  background-color: #183020;
+  outline: 0;
+}
+
+*::-webkit-scrollbar-track
+{
+  background-color: #385030;
+}
+
+body
+{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+
+  color: #001808;
+  background-color: #E0F0E0;
+  min-height: 120vh;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#root
+{
+  height: 120vh;
+
+  display: flex;
+  flex-direction: column;
+}
+
+code
+{
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}

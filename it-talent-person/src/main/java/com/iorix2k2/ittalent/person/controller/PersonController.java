@@ -37,6 +37,13 @@ public class PersonController
 		return new ResponseEntity<Person>(person, getHeaders(), HttpStatus.OK);
 	}
 	
+	@RequestMapping(path = "/ids/{ids}", method = RequestMethod.GET)
+	public ResponseEntity<Catalogue<Person>> getByIds(@PathVariable Long[] ids)
+	{
+		var pc = new Catalogue<Person>(personService.getByIds(ids));
+		return new ResponseEntity<Catalogue<Person>>(pc, getHeaders(), HttpStatus.OK);
+	}
+
 	@RequestMapping(path = "/name-with/{name}", method = RequestMethod.GET)
 	public ResponseEntity<Catalogue<Person>> getByNameWith(@PathVariable String name)
 	{
@@ -50,7 +57,7 @@ public class PersonController
 		return new ResponseEntity<Person>(personService.add(person), getHeaders(), HttpStatus.OK);
 	}
 
-	@RequestMapping(path = "{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody Person person)
 	{
 		person.setId(id);

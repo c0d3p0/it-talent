@@ -11,4 +11,5 @@ import com.iorix2k2.ittalent.skill.model.Skill;
 public interface SkillRepository extends JpaRepository<Skill, Long>
 {
 	List<Skill> findByTitleContainingIgnoreCase(String name);
+	List<Skill> findAllByIdIn(Long[] ids);
 }

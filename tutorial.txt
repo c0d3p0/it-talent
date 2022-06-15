@@ -1,0 +1,7 @@
+1: App URL
+
+Frontend:				http://localhost:3000
+Person Service:			http://localhost:9001/api/person
+Person Skill:			http://localhost:9002/api/skill
+PersonSkill Service:	http://localhost:9003/api/person-skill
+Eureka Server Service:	http://localhost:8761

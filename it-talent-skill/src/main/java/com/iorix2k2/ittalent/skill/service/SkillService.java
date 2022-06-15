@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.iorix2k2.ittalent.skill.model.Skill;
 import com.iorix2k2.ittalent.skill.repository.SkillRepository;
@@ -28,7 +27,12 @@ public class SkillService
 		
 		return os.get();
 	}
-	
+
+	public List<Skill> getByIds(Long[] ids)
+	{
+		return skillRepository.findAllByIdIn(ids);
+	}
+
 	public List<Skill> getByTitleWith(String title)
 	{
 		return skillRepository.findByTitleContainingIgnoreCase(title);
@@ -52,16 +56,6 @@ public class SkillService
 		
 		if(op.isEmpty())
 			return new Skill();
-
-		try
-		{
-			restTemplate.delete("http://it-talent-person-skill-service/api/person-skill/skill/" + id);
-		}
-		catch(Exception e)
-		{
-			String errorMessage = "Problems to remove the skills of this person in the system! ";
-			throw new RuntimeException(errorMessage + e.getMessage());
-		}
 		
 		skillRepository.deleteById(id);
 		return op.get();
@@ -76,7 +70,4 @@ public class SkillService
 	
 	@Autowired
 	private SkillRepository skillRepository;
-	
-	@Autowired
-	private RestTemplate restTemplate;
 }

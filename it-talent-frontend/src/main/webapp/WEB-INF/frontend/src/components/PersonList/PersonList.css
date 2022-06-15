@@ -1,0 +1,72 @@
+.person-list
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.person-list .person-list-item
+{
+  display: flex;
+  flex-direction: row;
+}
+
+.person-list .person-list-item:not(:last-child) .separator
+{
+  border: 0;
+  border-bottom: 2px;
+  border-style: solid;
+  border-color: #A0B0A8;
+
+  padding-bottom: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.person-list .person-list-item .person-data h2
+{
+  text-align: center;
+}
+
+.person-list .person-list-item .person-data
+{
+  width: 100%;
+}
+
+.person-list .person-list-item .person-data label
+{
+  font-weight: bold;
+}
+
+.person-list .person-list-item .person-data h2
+{
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.person-list .person-list-item .person-data .item-list
+{
+  margin-top: 0.2rem;
+}
+
+.person-list .person-list-item .person-action
+{
+  width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.person-list .person-list-item .person-action button
+{
+  margin-bottom: 0.5rem;
+}
+
+.person-list .message
+{
+  text-align: center;
+  font-weight: bold;
+
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+

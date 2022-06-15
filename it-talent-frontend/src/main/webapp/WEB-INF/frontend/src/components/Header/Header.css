@@ -1,0 +1,50 @@
+.header
+{
+  color: white;
+  background-color: #183020;
+
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.header .logo
+{
+  width: 25%;
+
+  margin-left: 1rem;
+  margin-right: auto;
+}
+
+.header .logo img
+{
+  height: 3rem;
+
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.header .search
+{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.header .app-mode
+{
+  width: 25%;
+  margin-left: auto;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.header .app-mode button
+{
+  margin-right: 1rem;
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}

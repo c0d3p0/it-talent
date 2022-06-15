@@ -11,70 +11,98 @@ import org.springframework.web.client.RestTemplate;
 
 import com.iorix2k2.ittalent.personskill.model.Catalogue;
 import com.iorix2k2.ittalent.personskill.model.Skill;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 
 @Service
 public class SkillService
 {
-	@HystrixCommand(fallbackMethod = "getAllSkillsOnError",
-			commandProperties = {
-					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
-			},
-			
-			threadPoolKey = "skillsPool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "30"),
-					@HystrixProperty(name = "maxQueueSize", value = "15")
-			})
-	public List<Skill> getAllSkills()
+	@CircuitBreaker(name = SKILL_SERVICE_CB, fallbackMethod = "getAllOnError")
+	public List<Skill> getAll()
 	{
-		Catalogue<Skill> skillCatalogue = restTemplate.exchange(skillServiceURL, HttpMethod.GET,
+		var skillCatalogue = restTemplate.exchange(SKILL_BASE_URL, HttpMethod.GET,
 				null, new ParameterizedTypeReference<Catalogue<Skill>>(){}).getBody();
 		return skillCatalogue.getList();
 	}
 	
-	@HystrixCommand(fallbackMethod = "getSkillOnError",
-			commandProperties = {
-					@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-					@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "6"),
-					@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-					@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "8000")
-			},
-			
-			threadPoolKey = "skillPool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "30"),
-					@HystrixProperty(name = "maxQueueSize", value = "15")
-			})
-	public Skill getSkill(Long id)
+	@CircuitBreaker(name = SKILL_SERVICE_CB, fallbackMethod = "getByIdOnError")
+	public Skill getById(Long id)
+	{	
+		return restTemplate.getForObject(SKILL_BY_ID_URL, Skill.class, id);
+	}
+
+	@CircuitBreaker(name = SKILL_SERVICE_CB, fallbackMethod = "getByIdsOnError")
+	public List<Skill> getByIds(Long[] ids)
 	{
-		String skillUrl = skillServiceURL + "/" + id;
-		return restTemplate.getForObject(skillUrl, Skill.class);
+		var param = Arrays.toString(ids).replaceAll("(\\[)*( )*(\\])*", "");
+		var skillCatalogue = restTemplate.exchange(SKILL_BY_IDS_URL, HttpMethod.GET,
+				null, new ParameterizedTypeReference<Catalogue<Skill>>(){}, param).getBody();
+		return skillCatalogue.getList();
+	}
+	
+	@CircuitBreaker(name = SKILL_SERVICE_CB, fallbackMethod = "getByTitleWithOnError")
+	public List<Skill> getByTitleWith(String title)
+	{
+		var skillCatalogue = restTemplate.exchange(SKILL_BY_TITLE_URL, HttpMethod.GET,
+				null, new ParameterizedTypeReference<Catalogue<Skill>>(){}, title).getBody();
+		return skillCatalogue.getList();
+	}
+
+	@CircuitBreaker(name = SKILL_SERVICE_CB, fallbackMethod = "removeOnError")
+	public Skill remove(Long id)
+	{
+		return restTemplate.exchange(SKILL_BY_ID_URL, HttpMethod.DELETE,
+				null, Skill.class, id).getBody();
 	}
 	
 	@SuppressWarnings("unused")
-	private List<Skill> getAllSkillsOnError()
+	private List<Skill> getAllOnError(Throwable T)
 	{
-		return Arrays.asList(getSkillOnError(-1L));
+		return Arrays.asList(createUnavailableSkill(-1L));
 	}
 	
-	private Skill getSkillOnError(Long id)
+	@SuppressWarnings("unused")
+	private Skill getByIdOnError(Throwable T)
 	{
-		Skill skill = new Skill();
-		skill.setId(id);
+		return createUnavailableSkill(-1L);
+	}
+
+	@SuppressWarnings("unused")
+	private List<Skill> getByIdsOnError(Throwable T)
+	{
+		return Arrays.asList(createUnavailableSkill(-1L));
+	}
+
+	@SuppressWarnings("unused")
+	private List<Skill> getByTitleWithOnError(Throwable T)
+	{
+		return Arrays.asList(createUnavailableSkill(-1L));
+	}
+	
+	@SuppressWarnings("unused")
+	private Skill removeOnError(Throwable T)
+	{
+		return createUnavailableSkill(-1L);
+	}
+
+	private Skill createUnavailableSkill(Long id)
+	{
+		var skill = new Skill();
+		skill.setId(id != null ? id : -1L);
 		skill.setTitle("Unavailable");
-		skill.setDescription("Unavailable.");
+		skill.setDescription("Unavailable data.");
 		return skill;
 	}
-	
-	
+
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
-	private String skillServiceURL = "http://it-talent-skill-service/api/skill";
+
+	private static final String SKILL_BASE_URL = "http://it-talent-skill-service/api/skill";
+	private static final String SKILL_BY_ID_URL = SKILL_BASE_URL + "/{id}";
+	private static final String SKILL_BY_IDS_URL = SKILL_BASE_URL + "/ids/{ids}";
+	private static final String SKILL_BY_TITLE_URL = SKILL_BASE_URL + "/title-with/{title}";
+
+	private static final String SKILL_SERVICE_CB = "skillServiceCB";
 }
