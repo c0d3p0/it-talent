@@ -10,7 +10,7 @@ There are binaries inside the folder "it-talent-binaries", execute them and acce
 
 **Technologies Used**
 <br/>
-- Java 12 <br/>
+- Java 11 <br/>
 - Spring Boot <br/>
 - Spring MVC <br/>
 - Spring Data <br/>
