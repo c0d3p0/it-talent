@@ -1,13 +1,11 @@
-import { IAppAction } from "../../data/AppActionMap";
 import Person from "../../model/Person";
 
 import "./PersonList.css";
 
 
 export default function PersonListView(props: IProps) {
-  if(!props.message && props.appAction) {
+  if(props.people && !props.message) {
     const peopleElements = createPeopleElements(props);
-
 
     return (
       <div className="person-list box">
@@ -21,6 +19,8 @@ export default function PersonListView(props: IProps) {
       </div>
     );
   } else {
+    const m = props.people ? props.message : "Please wait, loading the data...";
+
     return (
       <div className="person-list box">
         <div className="box-title">
@@ -28,7 +28,7 @@ export default function PersonListView(props: IProps) {
           {createAddButton(props)}
         </div>
         <div className="message">
-          {props.message}
+          {m}
         </div>
       </div>
     );
@@ -50,7 +50,7 @@ const createAddButton = (props: IProps) => {
 
 const createPeopleElements = (props: IProps) => {
   const elements: JSX.Element[] = [];
-  props?.people.forEach((person) => {
+  props.people?.forEach((person) => {
     if(person.id !== undefined)
       elements.push(createPersonElement(props, person));
   });
@@ -152,8 +152,7 @@ const createSkillListElement = (props: IProps, person: Person) => {
 
 interface IProps {
   editMode: boolean;
-  appAction?: IAppAction;
-  people: Person[];
+  people: Person[] | null;
   message?: string;
   onAddPersonClick(): void;
   onSkillClick(id? : string): void;

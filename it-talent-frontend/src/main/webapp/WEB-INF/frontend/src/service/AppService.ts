@@ -58,13 +58,11 @@ class AppService {
     return {headers: Object.assign(headers, attributes)};
   }
 
-  getCurrentOrDefaultSection = (currentKey: string, section: string) => {
-    if(section === "person" || section === "skill") {
-      const apiAction = appActionMap.get(currentKey);
-      return apiAction ? apiAction : appActionMap.get(section);
-    }
-
-    throw Error("Invalid section!");
+  getCurrentURLParameters = () => {
+    const url = window.location.href;
+    const index = url.indexOf("/") + 1;
+    const params = url.substring(index, url.length).split("/");
+    return params.slice(1, params.length);
   }
 }
 

@@ -5,7 +5,7 @@ import "./PersonSkillForm.css";
 
 
 export default function PersonSkillFormView(props: IProps) {
-  if(props.editMode && !props.state.error) {
+  if(props.editMode && !props.state.message) {
     return (
       <div className="person-skill-form box">
         <div className="box-title">
@@ -54,7 +54,7 @@ export default function PersonSkillFormView(props: IProps) {
           </div>
         </div>
         <div className="message">
-          {props.state.error}
+          {props.state.message}
         </div>
       </div>
     );

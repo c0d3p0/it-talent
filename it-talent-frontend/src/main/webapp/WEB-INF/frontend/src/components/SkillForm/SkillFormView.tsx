@@ -4,11 +4,11 @@ import "./SkillForm.css";
 
 
 export default function SkillFormView(props: IProps) {
-  if(props.editMode && !props.state.error) {
+  if(props.editMode && !props.state.message) {
     return (
       <div className="skill-form box">
         <div className="box-title">
-          <h1>{props.title}</h1>
+        <h1>{`${props.state.isEditing ? "Edit" : "Add"} Skill`}</h1>
           <div className="box-actions">
             <button
               title="Go Back"
@@ -28,7 +28,7 @@ export default function SkillFormView(props: IProps) {
                 placeholder="Title"
                 value={props.state.title ?? ""}
                 onChange={(e) => props.updateState("title", e.target.value)}
-                disabled={!props.isAdding}
+                disabled={props.state.isEditing}
               />
             </div>
             <label htmlFor="skill-description">Description: </label>
@@ -59,7 +59,7 @@ export default function SkillFormView(props: IProps) {
     return (
       <div className="skill-form box">
         <div className="box-title">
-          <h1>{props.title}</h1>
+        <h1>{`${props.state.isEditing ? "Edit" : "Add"} Skill`}</h1>
           <div className="box-actions">
             <button
               title="Go Back"
@@ -69,7 +69,7 @@ export default function SkillFormView(props: IProps) {
           </div>
         </div>
         <div className="message">
-          {props.state.error}
+          {props.state.message}
         </div>
       </div>
     );
@@ -79,8 +79,6 @@ export default function SkillFormView(props: IProps) {
 
 interface IProps {
   editMode: boolean;
-  isAdding: boolean;
-  title: string;
   state: IState;
   updateState(type: string, value: string): void;
   onReturnClick(): void;

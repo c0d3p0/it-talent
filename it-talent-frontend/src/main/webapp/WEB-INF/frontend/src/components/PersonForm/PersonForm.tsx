@@ -1,8 +1,7 @@
 import { useEffect, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { IAppActionData, setAppActionData } from "../../features/AppActionData";
 import PersonFormView from "./PersonFormView";
 import appActionMap from "../../data/AppActionMap";
 import Person from "../../model/Person";
@@ -10,42 +9,35 @@ import appService from "../../service/AppService";
 
 
 export default function PersonForm() {
-  const globalDispatch = useDispatch();
   const navigate = useNavigate();
-  const editMode = useSelector((state: any) => state.editMode.value as boolean);
-  const appActionData = useSelector((state: any) =>
-      state.appActionData.value as IAppActionData);
-  const isAdding = appActionData.key !== "person-edit";
-  const [state, dispatch] = useReducer(reducer, createEmptyState(isAdding));
-  const title = `${isAdding ? "Add" : "Edit"} Person`;
+  const location = useLocation();
+  const editMode = useSelector<any, boolean>((state) => state.editMode.value);
+  const [state, dispatch] = useReducer(reducer, createEmptyState());
   useEffect(() => handleFormAccess(), [editMode]);
-  useEffect(() => fetchData(), [editMode, appActionData]);
+  useEffect(() => fetchData(), [editMode, location]);
 
 
   const handleFormAccess = () => {
     if(!editMode) {
       const message = "You don't have permission to change any data!";
-      dispatch({type: "error", value: message});
-    } else
-      dispatch({type: "state", value: createEmptyState(isAdding)});
-
-    if(!validAppActionSet.has(appActionData.key)) {
-      const key = "person-add";
-      const previous = appActionData.previous;
-      globalDispatch(setAppActionData({key, params: [], previous}));
+      dispatch({type: "message", value: message});
+    } else {
+      dispatch({type: "state", value: createEmptyState()});
     }
   }
 
   const fetchData = () => {
-    if(editMode && !isAdding) {
+    if(editMode && state.isEditing) {
+      const urlParams = appService.getCurrentURLParameters();
       const appAction = appActionMap.get("person-find-by-id");
-      const params = appActionData.params;
+      const params = urlParams[2] ? [urlParams[2]] : ["-1"];
       appService.exchange<Person>(appAction, params).then((response) => {
-        const state = {...response.data, error: ""};
-        dispatch({type: "state", value: state});
+        const isEditing = state.isEditing;
+        const newState = {...response.data, message: "", isEditing};
+        dispatch({type: "state", value: newState});
       }).catch((error) => {
         const errorMessage = "An error happened getting the person to edit!";
-        dispatch({type: "error", value: errorMessage});
+        dispatch({type: "message", value: errorMessage});
         console.log(errorMessage);
         console.log(error);
       });
@@ -59,12 +51,14 @@ export default function PersonForm() {
     const validation = validatePerson(person);
 
     if(validation.valid) {
-      const appAction = appActionMap.get(appActionData.key);
-      const params = appActionData.params;
+      const urlParams = appService.getCurrentURLParameters();
+      const key = state.isEditing ? "person-edit" : "person-add";
+      const appAction = appActionMap.get(key);
+      const params = state.isEditing ? [urlParams[2]] : [];
       appService.exchange<Person>(appAction, params, person).then((response) => {
-        alert(`Person ${isAdding ? "added" : "edited"} in the system`);
+        alert(`Person ${state.isEditing ? "edited" : "added"} in the system!`);
 
-        if(isAdding)
+        if(!state.isEditing)
           dispatch({type: "clear", value: null});
       }).catch((error) => {
         const errorMessage = "An error happened sending the data to the system!";
@@ -79,11 +73,7 @@ export default function PersonForm() {
   }
 
   const onReturnClick = () => {
-    const key = appActionData.previous?.key ?? "person";
-    const params = appActionData.previous?.params ?? [];
-    const newAppAction = appActionMap.get(key);
-    globalDispatch(setAppActionData({key, params}));
-    navigate(`/${newAppAction?.section}`);
+    navigate(-1);
   }
 
   const onClearClick = () => {
@@ -120,7 +110,6 @@ export default function PersonForm() {
   return (
     <PersonFormView
       editMode={editMode}
-      title={title}
       state={state}
       updateState={updateState}
       onSubmit={onSubmit}
@@ -131,12 +120,14 @@ export default function PersonForm() {
 }
 
 
-const createEmptyState = (isAdding: boolean) => {
-  const error = isAdding ? "" : "Please wait, loading the data...";
+const createEmptyState = () => {
+  const urlParams = appService.getCurrentURLParameters();
+  const isEditing = urlParams[2] ? true : false;
+  const message = isEditing ? "Please wait, loading the data..." : "";
+
   return {
-    id: undefined,
-    name: "", age: "", country: "",
-    email: "", error
+    isEditing, message,
+    id: undefined, name: "", age: "", country: "", email: ""
   } as IState;
 }
 
@@ -149,15 +140,15 @@ const reducer = (state: any, action: any) => {
     return {...state, [action.type]: action.value};
 }
 
-const validAppActionSet = new Set(["person-add", "person-edit"]);
-
 interface IState {
+  isEditing: boolean;
+  message?: string;
+
   id?: number;
   name?: string;
   age?: string;
   country?: string;
   email?: string;
-  error?: string;
 }
 
 

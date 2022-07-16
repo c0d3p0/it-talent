@@ -4,11 +4,11 @@ import "./PersonForm.css";
 
 
 export default function PersonFormView(props: IProps) {
-  if(props.editMode && !props.state.error) {
+  if(props.editMode && !props.state.message) {
     return (
       <div className="person-form box">
         <div className="box-title">
-          <h1>{props.title}</h1>
+          <h1>{`${props.state.isEditing ? "Edit" : "Add"} Person`}</h1>
           <div className="box-actions">
             <button
               title="Go Back"
@@ -38,7 +38,7 @@ export default function PersonFormView(props: IProps) {
                 type="text"
                 placeholder="Age"
                 value={props.state.age ?? ""}
-                onChange={(e) => props.updateState("age", e.target.value)}
+                onChange={(e) => props.updateState("age", e.target.value.replace(/\D/g, ""))}
               />
             </div>
             <div className="form-field">
@@ -83,7 +83,7 @@ export default function PersonFormView(props: IProps) {
     return (
       <div className="person-form box">
         <div className="box-title">
-          <h1>{props.title}</h1>
+          <h1>{`${props.state.isEditing ? "Edit" : "Add"} Person`}</h1>
           <div className="box-actions">
             <button
               title="Go Back"
@@ -93,7 +93,7 @@ export default function PersonFormView(props: IProps) {
           </div>
         </div>
         <div className="message">
-          {props.state.error}
+          {props.state.message}
         </div>
       </div>
     );
@@ -103,7 +103,6 @@ export default function PersonFormView(props: IProps) {
 
 interface IProps {
   editMode: boolean;
-  title: string;
   state: IState;
   updateState(type: string, value: string): void;
   onReturnClick(): void;

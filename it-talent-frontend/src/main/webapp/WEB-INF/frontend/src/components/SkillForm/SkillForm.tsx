@@ -1,8 +1,7 @@
 import { useEffect, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { IAppActionData, setAppActionData } from "../../features/AppActionData";
 import SkillFormView from "./SkillFormView";
 import appActionMap from "../../data/AppActionMap";
 import appService from "../../service/AppService";
@@ -10,42 +9,34 @@ import Skill from "../../model/Skill";
 
 
 export default function SkillForm() {
-  const globalDispatch = useDispatch();
   const navigate = useNavigate();
-  const editMode = useSelector((state: any) => state.editMode.value as boolean);
-  const appActionData = useSelector((state: any) =>
-      state.appActionData.value as IAppActionData);
-  const isAdding = appActionData.key !== "skill-edit";
-  const [state, dispatch] = useReducer(reducer, createEmptyState(isAdding));
-  const title = `${isAdding ? "Add" : "Edit"} Skill`;
+  const location = useLocation();
+  const editMode = useSelector<any, boolean>((state) => state.editMode.value);
+  const [state, dispatch] = useReducer(reducer, createEmptyState());
   useEffect(() => handleFormAccess(), [editMode]);
-  useEffect(() => fetchData(), [editMode, appActionData]);
+  useEffect(() => fetchData(), [editMode, location]);
 
 
   const handleFormAccess = () => {
     if(!editMode) {
       const message = "You don't have permission to change any data!";
-      dispatch({type: "error", value: message});
+      dispatch({type: "message", value: message});
     } else
-      dispatch({type: "state", value: createEmptyState(isAdding)});
-
-    if(!validAppActionSet.has(appActionData.key)) {
-      const key = "skill-add";
-      const previous = appActionData.previous;
-      globalDispatch(setAppActionData({key, params: [], previous}));
-    }
+      dispatch({type: "state", value: createEmptyState()});
   }
 
   const fetchData = () => {
-    if(editMode && !isAdding) {
+    if(editMode && state.isEditing) {
+      const urlParams = appService.getCurrentURLParameters();
       const appAction = appActionMap.get("skill-find-by-id");
-      const params = appActionData.params;
+      const params = urlParams[2] ? [urlParams[2]] : ["-1"];
       appService.exchange<Skill>(appAction, params).then((response) => {
-        const state = {...response.data, error: ""};
-        dispatch({type: "state", value: state});
+        const isEditing = state.isEditing;
+        const newState = {...response.data, message: "", isEditing};
+        dispatch({type: "state", value: newState});
       }).catch((error) => {
         const errorMessage = "An error happened getting the skill to edit!";
-        dispatch({type: "error", value: errorMessage});
+        dispatch({type: "message", value: errorMessage});
         console.log(errorMessage);
         console.log(error);
       });
@@ -58,12 +49,14 @@ export default function SkillForm() {
     const validation = validateSkill(skill);
 
     if(validation.valid) {
-      const appAction = appActionMap.get(appActionData.key);
-      const params = appActionData.params;
+      const urlParams = appService.getCurrentURLParameters();
+      const key = state.isEditing ? "skill-edit" : "skill-add";
+      const appAction = appActionMap.get(key);
+      const params = state.isEditing ? [urlParams[2]] : [];
       appService.exchange<Skill>(appAction, params, skill).then((response) => {
-        alert(`Skill ${isAdding ? "added" : "edited"} in the system`);
+        alert(`Skill ${state.isEditing ? "edited" : "added"} in the system!`);
 
-        if(isAdding)
+        if(!state.isEditing)
           dispatch({type: "clear", value: null});
       }).catch((error) => {
         const errorMessage = "An error happened sending the data to the system!";
@@ -78,11 +71,7 @@ export default function SkillForm() {
   }
 
   const onReturnClick = () => {
-    const key = appActionData.previous?.key ?? "skill";
-    const params = appActionData.previous?.params ?? [];
-    const newAppAction = appActionMap.get(key);
-    globalDispatch(setAppActionData({key, params}));
-    navigate(`/${newAppAction?.section}`);
+    navigate(-1);
   }
 
   const onClearClick = () => {
@@ -107,8 +96,6 @@ export default function SkillForm() {
   return (
     <SkillFormView
       editMode={editMode}
-      isAdding={isAdding}
-      title={title}
       state={state}
       updateState={updateState}
       onSubmit={onSubmit}
@@ -119,9 +106,15 @@ export default function SkillForm() {
 }
 
 
-const createEmptyState = (isAdding: boolean) => {
-  const error = isAdding ? "" : "Please wait, loading the data...";
-  return {id: undefined, title: "", description: "", error} as IState;
+const createEmptyState = () => {
+  const urlParams = appService.getCurrentURLParameters();
+  const isEditing = urlParams[2] ? true : false;
+  const message = isEditing ? "Please wait, loading the data..." : "";
+
+  return {
+    isEditing, message,
+    id: undefined, title: "", description: ""
+  } as IState;
 }
 
 const reducer = (state: any, action: any) => {
@@ -133,13 +126,13 @@ const reducer = (state: any, action: any) => {
     return {...state, [action.type]: action.value};
 }
 
-const validAppActionSet = new Set(["skill-add", "skill-edit"]);
-
 interface IState {
+  isEditing: boolean;
+  message?: string;
+
   id?: number;
   title?: string;
   description?: string;
-  error?: string;
 }
 
 

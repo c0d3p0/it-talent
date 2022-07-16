@@ -1,8 +1,7 @@
 import { useEffect, useReducer } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { IAppActionData, setAppActionData } from "../../features/AppActionData";
 import PersonSkillFormView from "./PersonSkillFormView";
 import appService from "../../service/AppService";
 import appActionMap from "../../data/AppActionMap";
@@ -12,38 +11,37 @@ import PersonSkill from "../../model/PersonSkill";
 
 
 export default function PersonSkillForm() {
-  const globalDispatch = useDispatch();
   const navigate = useNavigate();
-  const editMode = useSelector((state: any) => state.editMode.value as boolean);
-  const appActionData = useSelector((state: any) =>
-      state.appActionData.value as IAppActionData);
+  const editMode = useSelector<any, boolean>((state) => state.editMode.value);
+  const location = useLocation();
   const [state, dispatch] = useReducer(reducer, createEmptyState());
   useEffect(() => handleFormAccess(), [editMode]);
-  useEffect(() => fetchSkills(), [editMode]);
-  useEffect(() => fetchPerson(), [editMode, state.refreshForm]);
+  useEffect(() => fetchSkills(), [editMode, location]);
+  useEffect(() => fetchPerson(), [editMode, location, state.refreshForm]);
   useEffect(() => createAvailableSkills(), [state.person, state.skills]);
 
 
   const handleFormAccess = () => {
     if(!editMode) {
       const message = "You don't have permission to change any data!";
-      dispatch({type: "error", value: message});
+      dispatch({type: "message", value: message});
     } else
-      dispatch({type: "error", value: ""});
+      dispatch({type: "message", value: ""});
   }
 
   const fetchPerson = () => {
     if(editMode) {
+      const urlParams = appService.getCurrentURLParameters();
       const appAction = appActionMap.get("person-find-by-id");
-      const params = appActionData.params;
+      const params = [urlParams[2] ? urlParams[2] : "-1"];
       appService.exchange<Person>(appAction, params).then((response) => {
         if(response.data.id)
           dispatch({type: "person", value: response.data});
         else
-          dispatch({type: "error", value: "Person to edit not found!"});
+          dispatch({type: "message", value: "Person to edit not found!"});
       }).catch((error) => {
         const errorMessage = "An error happened getting the people!";
-        dispatch({type: "error", value: errorMessage});
+        dispatch({type: "message", value: errorMessage});
         console.log(errorMessage);
         console.log(error);
       });
@@ -58,7 +56,7 @@ export default function PersonSkillForm() {
         dispatch({type: "skills", value: skills});
       }).catch((error) => {
         const errorMessage = "An error happened getting the skills!";
-        dispatch({type: "error", errorMessage});
+        dispatch({type: "message", errorMessage});
         console.log(errorMessage);
         console.log(error);
       });
@@ -71,7 +69,7 @@ export default function PersonSkillForm() {
     if(skills && person) {
       const addedSet = new Set(person.skillList?.map((skill) => skill.id));
       const availableSkills = skills.filter((s) => !addedSet.has(s.id));
-      const newState = {...state, availableSkills, error: ""};
+      const newState = {...state, availableSkills, message: ""};
       dispatch({type: "state", value: newState});
     }
   }
@@ -80,9 +78,9 @@ export default function PersonSkillForm() {
     const appAction = appActionMap.get("person-skill-add");
     const body = new PersonSkill(state.person.id, skill.id);
     appService.exchange<PersonSkill>(appAction, [], body).then((response) => {
-      const error = "Refreshing data, wait a minute...";
+      const message = "Refreshing data, wait a minute...";
       const refreshForm = state.refreshForm + 1;
-      dispatch({type: "state", value: {...state, error, refreshForm}});
+      dispatch({type: "state", value: {...state, message, refreshForm}});
     }).catch((error) => {
       const errorMessage = "An error happened sending the data to the system!";
       console.log(errorMessage);
@@ -96,9 +94,9 @@ export default function PersonSkillForm() {
     const param = [state.person?.id?.toString(), skill.id?.toString()];
     const body = new PersonSkill(state.person?.id, skill.id);
     appService.exchange<PersonSkill>(appAction, param, body).then((response) => {
-      const error = "Refreshing data, wait a minute...";
+      const message = "Refreshing data, wait a minute...";
       const refreshForm = state.refreshForm + 1;
-      dispatch({type: "state", value: {...state, error, refreshForm}});
+      dispatch({type: "state", value: {...state, message, refreshForm}});
     }).catch((error) => {
       const errorMessage = "An error happened sending the data to the system!";
       console.log(errorMessage);
@@ -108,11 +106,7 @@ export default function PersonSkillForm() {
   }
 
   const onReturnClick = () => {
-    const key = appActionData.previous?.key ?? "person";
-    const params = appActionData.previous?.params ?? [];
-    const newAppAction = appActionMap.get(key);
-    globalDispatch(setAppActionData({key, params}));
-    navigate(`/${newAppAction?.section}`);
+    navigate(-1);
   }
 
 
@@ -130,7 +124,7 @@ export default function PersonSkillForm() {
 
 const createEmptyState = () => {
   return {
-    error: "Please wait, loading the data...", 
+    message: "Please wait, loading the data...", 
     refreshForm: 0
   } as IState;
 }
@@ -145,11 +139,12 @@ const reducer = (state: any, action: any) => {
 }
 
 interface IState {
+  refreshForm: number;
+  message: string;
+
   person?: Person;
   skills: Skill[];
   availableSkills?: Skill[];
-  error: string;
-  refreshForm: number;
 }
 
 

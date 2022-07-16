@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { IAppActionData, setAppActionData } from "../../features/AppActionData";
 import appActionMap from "../../data/AppActionMap";
 import appService from "../../service/AppService";
 import SkillListView from "./SkillListView";
@@ -10,60 +9,45 @@ import Skill from "../../model/Skill";
 
 
 export default function SkillList() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [skills, setSkills] = useState([] as Skill[]);
-  const [message, setMessage] = useState("Please wait, loading the data...");
-  const editMode = useSelector((state: any) => state.editMode.value as boolean);
-  const appActionData = useSelector((state: any) =>
-      state.appActionData.value as IAppActionData);
-  const appAction = appActionMap.get(appActionData?.key);
-  useEffect(() => fetchData(), [appActionData]);
-  useEffect(() => fixAppActionData(), []);
+  const location = useLocation();
+  const editMode = useSelector<any, boolean>((state) => state.editMode.value);
+  const [skills, setSkills] = useState<Skill[] | null>(null);
+  const [message, setMessage] = useState("");
+  const [refreshTime, setRefreshTime] = useState(Date.now());
+  useEffect(() => fetchData(), [location, refreshTime]);
 
-
-  const fixAppActionData = () => {
-    if(!validAppActionSet.has(appActionData.key))
-      dispatch(setAppActionData({key: "skill-find", params: []}));
-  }
 
   const fetchData = () => {
-    if(validAppActionSet.has(appActionData.key)) {
-      appService.exchange(appAction, appActionData.params).then((response) => {
-        const data = appService.convertResponseToArray<Skill>(response.data);
-        const m = data.length < 1 ? "Not a single skill was found!": "";
-        setMessage(m);
-        setSkills(data);
-      }).catch((error) => {
-        const m = "An error happened when trying to request the data!";
-        setMessage(m);
-        console.log(m);
-        console.log(appAction);
-        console.log(error);
-      });
-    }
+    const urlParams = appService.getCurrentURLParameters();
+    const appAction = getAppAction(urlParams);
+    const params = urlParams[3] ? [urlParams[3]] : [];
+    appService.exchange(appAction, params).then((response) => {
+      const data = appService.convertResponseToArray<Skill>(response.data);
+      const m = data.length < 1 ? "Not a single skill was found!": "";
+      setMessage(m);
+      setSkills(data);
+    }).catch((error) => {
+      const m = "An error happened when trying to request the data!";
+      setMessage(m);
+      setSkills([]);
+      console.log(m);
+      console.log(error);
+    });
   }
   
   const onAddSkillClick = () => {
-    const key = "skill-add";
-    dispatch(setAppActionData({key, params: [], previous: appActionData}));
     navigate("/skill-form");
   }
 
-  const onShowPeopleWithThisSkillClick = (id?: string) => {
-    if(id) {
-      const key = "person-find-by-skill-id";
-      dispatch(setAppActionData({key, params: [id]}));
+  const onShowPeopleWithSkillClick = (id?: string) => {
+    if(id)
       navigate(`/person/with-skill/${id}`);
-    }
   }
 
   const onEditClick = (id?: string) => {
-    if(id) {
-      const key = "skill-edit";
-      dispatch(setAppActionData({key, params: [id], previous: appActionData}));
-      navigate(`/skill-form/id/${id}`);
-    }
+    if(id)
+      navigate(`/skill-form/${id}`);
   }
 
   const onRemoveClick = (skill: Skill) => {
@@ -74,7 +58,7 @@ export default function SkillList() {
       const appAction = appActionMap.get("skill-remove");
       const params = [skill.id?.toString() ?? "-1"];
       appService.exchange<Skill>(appAction, params).then((response) => {
-        dispatch(setAppActionData({key: "skill-find", params: []}));
+        setRefreshTime(Date.now());
         navigate("/skill");
       }).catch((error) => {
         let message = `An error happened removing ${suffix}!`;
@@ -89,11 +73,10 @@ export default function SkillList() {
   return (
     <SkillListView
       editMode={editMode}
-      appAction={appAction}
       skills={skills}
       message={message}
       onAddSkillClick={onAddSkillClick}
-      onShowPeopleWithThisSkillClick={onShowPeopleWithThisSkillClick}
+      onShowPeopleWithSkillClick={onShowPeopleWithSkillClick}
       onEditClick={onEditClick}
       onRemoveClick={onRemoveClick}
     />
@@ -101,5 +84,15 @@ export default function SkillList() {
 }
 
 
-const validAppActionSet = new Set(["skill", "skill-find",
-    "skill-find-by-id", "skill-find-by-title", "skill-find-by-person-id"]);
+const getAppAction = (urlParams: string[]) => {
+  let aux = appActionKeyMap.get(urlParams[2]);
+  let key = aux ? aux : appActionKeyMap.entries().next().value[1];
+  return appActionMap.get(key);
+}
+
+const appActionKeyMap = new Map<string, string>([
+  ["", "skill-find"],
+  ["id", "skill-find-by-id"],
+  ["title", "skill-find-by-title"],
+  ["by-person", "skill-find-by-person-id"]
+]);

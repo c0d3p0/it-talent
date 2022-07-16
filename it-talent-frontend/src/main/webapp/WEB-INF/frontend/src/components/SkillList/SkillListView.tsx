@@ -5,7 +5,7 @@ import "./SkillList.css";
 
 
 export default function SkillListView(props: IProps) {
-  if(!props.message && props.appAction) {
+  if(props.skills && !props.message) {
     const skillElements = createSkillElements(props);
 
     return (
@@ -20,6 +20,8 @@ export default function SkillListView(props: IProps) {
       </div>
     );
   } else {
+    const m = props.skills ? props.message : "Please wait, loading the data...";
+
     return (
       <div className="skill-list box">
         <div className="box-title">
@@ -27,7 +29,7 @@ export default function SkillListView(props: IProps) {
           {createAddButton(props)}
         </div>
         <div className="message">
-          {props.message}
+          {m}
         </div>
       </div>
     );
@@ -49,7 +51,7 @@ const createAddButton = (props: IProps) => {
 
 const createSkillElements = (props: IProps) => {
   const elements: JSX.Element[] = [];
-  props?.skills.forEach((skill) => {
+  props?.skills?.forEach((skill) => {
     if(skill.id !== undefined)
       elements.push(createSkillElement(props, skill));
   });
@@ -87,7 +89,7 @@ const createSkillActionElement = (props: IProps, skill: Skill) => {
         <button
           title="Show People With This Skill"
           className="squared-button bi bi-eye"
-          onClick={(e) => {props.onShowPeopleWithThisSkillClick(skill.id?.toString())}}
+          onClick={(e) => {props.onShowPeopleWithSkillClick(skill.id?.toString())}}
         />
         <button
           title="Edit Skill"
@@ -103,12 +105,13 @@ const createSkillActionElement = (props: IProps, skill: Skill) => {
     );
   }
 
+  const m = "Please wait, loading the data..."
   return (
     <div className="skill-action">
       <button
         title="Show People With This Skill"
         className="squared-button bi bi-eye"
-        onClick={(e) => {props.onShowPeopleWithThisSkillClick(skill.id?.toString())}}
+        onClick={(e) => {props.onShowPeopleWithSkillClick(skill.id?.toString())}}
       />
     </div>
   )
@@ -116,11 +119,10 @@ const createSkillActionElement = (props: IProps, skill: Skill) => {
 
 interface IProps {
   editMode: boolean;
-  appAction?: IAppAction;
-  skills: Skill[];
+  skills: Skill[] | null;
   message?: string;
   onAddSkillClick(): void;
-  onShowPeopleWithThisSkillClick(id?: string): void;
+  onShowPeopleWithSkillClick(id?: string): void;
   onEditClick(id?: string): void;
   onRemoveClick(skill: Skill): void;
 }

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { IAppActionData, setAppActionData } from "../../features/AppActionData";
 import appActionMap from "../../data/AppActionMap";
 import appService from "../../service/AppService";
 import PersonListView from "./PersonListView";
@@ -10,76 +9,56 @@ import Person from "../../model/Person";
 
 
 export default function PersonList() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [people, setPeople] = useState([] as Person[]);
-  const [message, setMessage] = useState("Please wait, loading the data...");
-  const editMode = useSelector((state: any) => state.editMode.value as boolean);
-  const appActionData = useSelector((state: any) =>
-      state.appActionData.value as IAppActionData);
-  const appAction = appActionMap.get(appActionData?.key);
-  useEffect(() => fetchData(), [appActionData]);
-  useEffect(() => fixAppActionData(), []);
+  const location = useLocation();
+  const editMode = useSelector<any, boolean>((state) => state.editMode.value);
+  const [people, setPeople] = useState<Person[] | null>(null);
+  const [message, setMessage] = useState("");
+  const [refreshTime, setRefreshTime] = useState(Date.now());
+  useEffect(() => fetchData(), [location, refreshTime]);
 
-
-  const fixAppActionData = () => {
-    if(!validAppActionSet.has(appActionData.key))
-      dispatch(setAppActionData({key: "person", params: []}));
-  }
 
   const fetchData = () => {
-    if(appAction) {
-      appService.exchange(appAction, appActionData.params).then((response) => {
-        const data = appService.convertResponseToArray<Person>(response.data);
-        const m = data.length < 1 ? "Not a single person was found!": "";
-        setMessage(m);
-        setPeople(data);
-      }).catch((error) => {
-        const m = "An error happened when trying to request the data!";
-        setMessage(m);
-        console.log(m);
-        console.log(appAction);
-        console.log(error);
-      });
-    }
+    const urlParams = appService.getCurrentURLParameters();
+    const appAction = getAppAction(urlParams);
+    const params = urlParams[3] ? [urlParams[3]] : [];
+    appService.exchange(appAction, params).then((response) => {
+      const data = appService.convertResponseToArray<Person>(response.data);
+      const m = data.length < 1 ? "Not a single person was found!": "";
+      setMessage(m);
+      setPeople(data);
+    }).catch((error) => {
+      const m = "An error happened when trying to request the data!";
+      setMessage(m);
+      setPeople([]);
+      console.log(m);
+      console.log(appAction);
+      console.log(error);
+    });
   }
   
   const onAddPersonClick = () => {
-    const key = "person-add";
-    dispatch(setAppActionData({key, params: [], previous: appActionData}));
     navigate("/person-form");
   }
 
   const onSkillClick = (id?: string) => {
-    if(id) {
-      const key = "skill-find-by-id";
-      dispatch(setAppActionData({key, params: [id]}));
+    if(id)
       navigate(`/skill/id/${id}`);
-    }
   }
 
   const onShowPersonSkillsClick = (id?: string) => {
-    if(id) {
-      const key = "skill-find-by-person-id";
-      dispatch(setAppActionData({key, params: [id]}));
+    if(id)
       navigate(`/skill/by-person/${id}`);
-    }
   }
 
   const onEditPersonSkillsClick = (id?: string) => {
-    if(id) {
-      const key = "person-skill-add";
-      dispatch(setAppActionData({key, params: [id], previous: appActionData}));
-      navigate(`/person-skill-form/id/${id}`);
-    }
+    if(id)
+      navigate(`/person-skill-form/${id}`);
   }
 
   const onEditClick = (id?: string) => {
-    if(id) {
-      const key = "person-edit";
-      dispatch(setAppActionData({key, params: [id], previous: appActionData}));
-      navigate(`/person-form/id/${id}`);
-    }
+    if(id)
+      navigate(`/person-form/${id}`);
   }
 
   const onRemoveClick = (person: Person) => {
@@ -90,7 +69,7 @@ export default function PersonList() {
       const appAction = appActionMap.get("person-remove");
       const params = [person.id?.toString() ?? "-1"];
       appService.exchange<Person>(appAction, params).then((response) => {
-        dispatch(setAppActionData({key: "person-find", params: []}));
+        setRefreshTime(Date.now());
         navigate("/person");
       }).catch((error) => {
         let message = `An error happened removing ${suffix}!`;
@@ -105,7 +84,6 @@ export default function PersonList() {
   return (
     <PersonListView
       editMode={editMode}
-      appAction={appAction}
       people={people}
       message={message}
       onAddPersonClick={onAddPersonClick}
@@ -119,7 +97,15 @@ export default function PersonList() {
 }
 
 
-const validAppActionSet = new Set(["person", "person-find",
-    "person-find-by-id", "person-find-by-name", "person-find-by-skill-id"]);
+const getAppAction = (urlParams: string[]) => {
+  let aux = appActionKeyMap.get(urlParams[2]);
+  let key = aux ? aux : appActionKeyMap.entries().next().value[1];
+  return appActionMap.get(key);
+}
 
-
+const appActionKeyMap = new Map<string, string>([
+  ["", "person-find"],
+  ["id", "person-find-by-id"],
+  ["name", "person-find-by-name"],
+  ["with-skill", "person-find-by-skill-id"]
+]);
